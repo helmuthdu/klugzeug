@@ -1,7 +1,7 @@
 ---
 name: review
-description: Strict, source-verified review of code, a pull request, or a design — correctness, API design, types, state and data fetching in UI code — with optional security, accessibility (WCAG), or performance lenses. Read-only; approved fixes go to build. Use when asked to review, critique, check code quality, audit for security, check accessibility, assess performance, or assess a PR or design.
-argument-hint: '<scope path or diff> [code | pr | greenfield | security | a11y | perf] [focus]'
+description: Strict, source-verified review of code, a pull request, or a design — correctness, API design, types, state and data fetching in UI code — with optional security, accessibility (WCAG), performance, UX, or UI lenses. Read-only; approved fixes go to build. Use when asked to review, critique, audit for security, check accessibility, assess performance, review UX or UI, or assess a PR or design.
+argument-hint: '<scope path or diff> [code | pr | greenfield | security | a11y | perf | ux | ui] [focus]'
 ---
 
 # review
@@ -13,7 +13,7 @@ Read `~/.agents/klugzeug/contract.md` and the profile. A review changes no code.
 - **code** (default): correctness, API design, types, tests, UI state, and data flow.
 - **pr**: the complete diff against its stated intent, plus the call sites of every changed public contract.
 - **greenfield**: challenge boundaries and abstractions, and recommend removing those that add no benefit.
-- **security**, **a11y**, **perf**: apply the matching `references/<lens>.md` checklist on top of `code`. Each lens needs its own kind of evidence: security needs an input-to-sink path, perf needs a measurement.
+- **security**, **a11y**, **perf**, **ux**, **ui**: apply the matching `references/<lens>.md` checklist on top of `code`. Each lens needs its own kind of evidence: security needs an input-to-sink path, perf needs a measurement, ux needs a named user task and screen state, ui needs the design reference a finding departs from.
 
 If the request names a lens, load only that lens file.
 
@@ -48,7 +48,7 @@ Summary: N Critical · N High · N Medium · N Low · open: <list or none>
 Verdict: Ready (no open Critical or High) | Needs work (open High) | Block (open Critical)
 ```
 
-For `greenfield`, report the 4 to 12 highest-value recommendations, each with: Problem, Change, Why better, Impact (references, dependents, unknown usage), Effort (Low/Medium/High), and Done when. End with `## Top Priority Changes`, ranked by value relative to effort.
+For `greenfield`, report the 4 to 12 highest-value recommendations, each with: Problem, Change, Why better, Impact (references, dependents, unknown usage), Effort (Low/Medium/High), and Done when. End with `## Top Priority Changes`, ranked by value relative to effort. For `ux` and `ui`, end with `## Top UX Improvements` or `## Top UI Improvements` as the lens file describes.
 
 ## Rules
 

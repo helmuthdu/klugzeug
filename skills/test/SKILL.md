@@ -19,7 +19,7 @@ For each public export or user-visible behaviour in scope, check:
 - the success path and documented options;
 - invalid input and boundary values, when the API accepts them;
 - async failure, cancellation, and cleanup, only when the API has those states;
-- for interactive UI: keyboard operation, not only clicks, and the loading, empty, and error states the component renders.
+- for interactive UI: keyboard operation, not only clicks, and each state the component renders (loading, empty, error, partial, success, disabled).
 
 Do not invent timeouts, cancellation, or edge cases the code does not have.
 
@@ -32,9 +32,9 @@ Also flag existing tests that are obsolete, duplicated, brittle (asserting struc
 - Interact the way a user does, with the profile's interaction helper. Assert on what is visible, not on private state.
 - Mock at the network boundary when the profile declares one. Mock modules only for true externals: clock, storage, browser APIs.
 - Make time, randomness, and scheduling deterministic with fake timers or injected clocks. No fixed sleeps.
-- Use `expect.assertions(n)` in async tests that assert inside callbacks.
+- An async test that asserts inside a callback must fail when that callback never runs. Use the runner's helper for that when it has one (for example `expect.assertions(n)`).
 - Snapshot only stable, human-readable output.
-- Keep tests strictly typed: no `any`, no unexplained `!` or `as`.
+- Keep tests free of the language's escape hatches (`any`, unexplained `!`, and `as` in TypeScript).
 - Never change a test to hide a real bug. Adjust one only when the behaviour change is intentional, and say so.
 
 ## 4. Layers
@@ -61,4 +61,4 @@ Iterate with single-file runs. After standalone test changes, run the profile's 
 - **Scope**: behaviours and contracts checked.
 - **Added / Removed / Rewritten**: counts, with each name and each removal's reason.
 - **After**: checks executed with results.
-- **Remaining gaps** and `[DEFERRED]` items.
+- **Remaining gaps**, `[BLOCKED]`, `[VERIFY]`, and `[DEFERRED]` items.

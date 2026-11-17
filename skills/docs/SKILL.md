@@ -14,12 +14,12 @@ Each page belongs to exactly one quadrant. Content that serves two purposes is s
 
 Test a doubtful page with the compass: is the content about action or cognition, and does the reader want acquisition or application? Tutorial is action + acquisition; how-to is action + application; reference is cognition + application; explanation is cognition + acquisition.
 
-| Quadrant     | Reader is                                      | Title form            | Contains                                  |
-| ------------ | ---------------------------------------------- | --------------------- | ----------------------------------------- |
-| Tutorial     | learning; needs a guaranteed first success     | "First …" lesson      | one ordered path, no choices              |
-| How-to guide | knows the goal; needs the steps                | imperative "Add a …"  | steps for one task; branches allowed      |
-| Reference    | looking a fact up while working                | noun "… options"      | facts, signatures, defaults; no steps     |
-| Explanation  | wants to understand why                       | topic "About …"       | reasons, context, trade-offs; no procedures |
+| Quadrant     | Reader is                                  | Title form               | Contains                                     |
+| ------------ | ------------------------------------------ | ------------------------ | -------------------------------------------- |
+| Tutorial     | learning; needs a guaranteed first success | "First …" lesson         | one ordered path, no choices                 |
+| How-to guide | knows the goal; needs the steps            | "How to …" or imperative | steps for one task; branches allowed         |
+| Reference    | looking a fact up while working            | noun "… options"         | facts, signatures, defaults; no steps        |
+| Explanation  | wants to understand why                    | topic "About …"          | reasons, context, trade-offs; no procedures  |
 
 A fact taken from a procedure belongs in reference. A reason belongs in explanation. State each fact once in reference and link to it from everywhere else. When the profile links doc or README templates, they win; otherwise use `references/diataxis.md`.
 
@@ -29,7 +29,7 @@ A fact taken from a procedure belongs in reference. A reason belongs in explanat
 2. Verify each claim. Anything you cannot verify is `[VERIFY]`, not written as fact.
 3. **JSDoc** on each public export: a one-sentence summary; parameters and return value when they are not obvious; thrown errors; one short example for a non-trivial API. Do not restate the type.
 4. For an API change, update reference first, then the pages that describe it, then the examples.
-5. Run tutorials end to end; they must work for every reader. Run other examples, or type-check them, when the profile allows. Otherwise mark them `[VERIFY]`.
+5. Run tutorials end to end; they must work for every reader. A tutorial you cannot run is `[VERIFY]`. Run other examples, or type-check them, when the profile allows. Otherwise mark them `[VERIFY]`.
 6. When a page is added, removed, or renamed, update navigation and indexes.
 7. Run the profile's docs validators and build once, after all doc edits.
 

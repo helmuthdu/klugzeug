@@ -13,9 +13,10 @@ Read `~/.agents/klugzeug/contract.md`. Onboarding reads the repository and write
 1. **Package manager and workspaces**: lockfile, `packageManager` field, `workspaces`, `engines`.
 2. **Commands**: `package.json` scripts (and the root's, in a monorepo) for install, dev, test, single-file test, lint, lint-fix, typecheck, build, e2e, docs, and any validation script. Map each to a command; never invent a missing one.
 3. **Tooling**: test runner config (vitest, jest, playwright), lint (biome, eslint), TypeScript config, framework and bundler from dependencies, browser test tooling.
-4. **Conventions**: `AGENTS.md`, `CONTRIBUTING*`, `.agents/`, `.github/pull_request_template.md`, `CHANGELOG*`, change-file tooling, release docs.
+4. **Conventions**: `AGENTS.md`, `CONTRIBUTING*`, `.agents/`, `.github/pull_request_template.md`, `CHANGELOG*`, change-file tooling, release docs, and protected branch names.
 5. **Boundaries**: CI workflow directories, generated folders, committed build output, and any "do not edit" notes.
-6. **Plan file**: where `.plan.md` would live, and whether `.gitignore` covers it.
+6. **Plan file**: where `.plan.md` would live, whether `.gitignore` covers it, and whether plans are committed.
+7. **References the other skills read**, linking a file only when it exists: design system or tokens, security checklist, doc or README templates, test helpers (query, interaction, network), and an accessibility target when the project states one. The a11y lens defaults to WCAG 2.2 Level A and AA.
 
 ## 2. Draft
 

@@ -39,7 +39,12 @@ Copy this structure into `AGENTS.md`. Delete any field that does not apply; mark
 
 - `<path>`: <what it governs, when to load it>
 - Public API entry points: `<path>`; errors in `<path>`
-- Plan file: `<path>/.plan.md` (gitignored: yes | no `[VERIFY]`)
+- Design system: `<path>` or none
+- Security checklist: `<path>` or none
+- Doc or README templates: `<path>` or none
+- Test helpers: query `<name>`, interaction `<name>`, network `<name>`
+- Accessibility target: <stated version and level> or unset (WCAG 2.2 Level A and AA)
+- Plan file: `<path>/.plan.md` (gitignored: yes | no; committed: yes | no)
 
 ### Project rules that always apply
 
@@ -52,6 +57,7 @@ Copy this structure into `AGENTS.md`. Delete any field that does not apply; mark
 ### Release and delivery
 
 - Commits: <convention, for example conventional commits>
-- Change files or changelog: <command, one call per package>
+- Protected branches: <names> or unset
+- Change files or changelog: <command and its granularity>
 - PR template: `<path>` or none
 ```

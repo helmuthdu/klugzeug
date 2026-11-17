@@ -23,12 +23,12 @@ Read `~/.agents/klugzeug/contract.md` and the project profile (commands, validat
 3. **Test first for bugs**: write a test that reproduces the reported behaviour and confirm it fails for the reported reason. Then fix.
 4. **Edit as one unit**: implementation, exports, types, tests, and the docs that describe the changed behaviour, together. Never leave a half-migrated surface.
 5. **Propagate**: search for the same root cause in sibling code with `rg` (add `--hidden` for renames). Fix equivalent occurrences only when they are in scope and verifiable; report the rest as `[DEFERRED]`. Do not propagate on style similarity alone.
-6. **Validate**: focused checks while iterating, then the profile's gates for each changed surface, run once and batched. Run the profile's lint-fix before the final gate.
-7. **Record**: mark the plan item `— DONE`, `— OBSOLETE`, or `— NO CHANGE NEEDED`. For bug fixes, name the regression test.
+6. **Validate**: focused checks while iterating, then the profile's gates for each changed surface, run once and batched. Run the profile's lint-fix on the files this change touched before the final gate.
+7. **Record**: mark the plan item `— DONE`, `— FIXED`, `— OBSOLETE`, or `— NO CHANGE NEEDED`. A review finding this pass fixed is `— FIXED`. For bug fixes, name the regression test.
 
 ## Flows by request
 
-- **Feature or refactor**: work the plan items in order, one at a time, each with its own validation.
+- **Feature or refactor**: work the plan items in order, one at a time. Focused checks per item; aggregate gates once, after the last item.
 - **Bug fix**: step 3 is mandatory. A fix without a test that failed before and passes after is `[VERIFY]`.
 - **Dependency upgrade**: follow `references/dependency-upgrade.md`.
 - **Removal, rename, migration, or deprecation**: follow `references/completeness-inventory.md` before editing, and reconcile it after validation.
@@ -37,7 +37,7 @@ Read `~/.agents/klugzeug/contract.md` and the project profile (commands, validat
 ## Rules
 
 - When a test fails, fix the code, not the test, unless the requested behaviour changes. Say explicitly when it does.
-- For an approved breaking change, remove the old path entirely: no shims, dead code, or transitional wrappers. Report the migration.
+- For an approved breaking change, remove the old path entirely: no shims, dead code, or transitional wrappers. Keep the old path only when the plan item is a deprecation that says to keep it. Report the migration.
 - Prefer the simplest design that meets the criteria. No speculative options or extension points.
 - Never weaken, skip, or delete a test to get green. Delete a test only when it asserts behaviour that was intentionally removed, and say which.
 - Do not commit, push, or publish here. Use `deliver`.

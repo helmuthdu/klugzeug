@@ -18,15 +18,15 @@ Each stage follows its own skill (`~/.agents/skills/<stage>/SKILL.md`, or the cl
 1. **plan**: write or validate `<scope>/.plan.md`. Present the plan and wait.
 2. **build**: an approval gate. Runs only after the user approves the plan items, or a named subset. Skipped in assess mode.
 3. **test**: gap analysis. Writes tests only inside the approved scope.
-4. **review**: the `code` lens, plus `security`, `a11y`, or `perf` when the scope touches those areas. Present the findings. Fixing them needs approval and a second `build` pass; re-review only the fixed findings. A finding is `— FIXED` only after that pass; otherwise it stays open.
+4. **review**: the `code` lens, plus `security`, `a11y`, `perf`, `ux`, or `ui` when the scope touches those areas. Present the findings. Fixing them needs approval and a second `build` pass; re-review only the fixed findings. A finding is `— FIXED` only after that pass; otherwise it stays open.
 5. **docs**: updates only the pages that the approved change touches.
-6. **deliver**: runs only when the request names a delivery action (commit, PR body). Otherwise stop after `docs` and report.
+6. **deliver**: runs only when the request names a delivery action (`commit`, `branch`, PR body, change file, or release notes). Otherwise stop after `docs` and report.
 
 Record a stage named after `skip:` as skipped. A skipped `build` gives no later stage authority to change code.
 
 ## Subagents
 
-Run a stage as a subagent only when it is bounded and its evidence is independent: for example, `review` of one module while `test` audits another. Each brief states the scope, the question, the evidence to return, the output format, and its write authority (none for review, plan, and test audits). Treat subagent results as evidence. Verify implementation-sensitive claims before a later stage relies on them.
+Run a stage as a subagent only when it is bounded and its evidence is independent: for example, `review` of one module while `test` audits another. Each brief states the scope, the question, the evidence to return, the output format, and its write authority (none for review and for test audits; plan may write only the plan file). Treat subagent results as evidence. Verify implementation-sensitive claims before a later stage relies on them.
 
 ## Handoff
 
@@ -42,7 +42,7 @@ Stop and report at any `[BLOCKED]`. Do not continue past a stage whose required 
 
 ## Finish
 
-Report one table, then the open `[BLOCKED]`, `[VERIFY]`, and `[DEFERRED]` items.
+Report one table, including the aggregate gate commands and their results, then the open `[BLOCKED]`, `[VERIFY]`, and `[DEFERRED]` items.
 
 | Step | Status (done / skipped / blocked) | Result |
 | ---- | --------------------------------- | ------ |

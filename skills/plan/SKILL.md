@@ -14,7 +14,7 @@ If `<scope>/.plan.md` exists, check each item against the current source before 
 
 ## Modes
 
-- **improve** (default): audit for architecture, API ergonomics (naming, parameter order, options objects for three or more parameters), unnecessary abstraction, error model and messages, loose types (`any`, broad casts, non-null `!`), duplicated logic, exports without tests, and performance or accessibility gaps visible in the code.
+- **improve** (default): audit for architecture, API ergonomics (naming, parameter order, options objects for three or more parameters), unnecessary abstraction, error model and messages, loose types and the language's escape hatches (`any`, casts, and non-null assertions in TypeScript), duplicated logic, exports without tests, and gaps a review lens would catch.
 - **feature `<name>`**: spec a capability inside an existing module. Give the problem, target users, three to five use cases, an out-of-scope list, integration points, and one signature per new export with its edge cases and errors.
 - **bug `<id or symptom>`**: triage only. Reproduce or locate the code path, state the suspected root cause with evidence, and write a `B` item that names the regression test to add. Do not fix here.
 - **new-module `<name>`**: as feature, plus a read of one comparable module so the new one follows the same layout.
@@ -23,13 +23,11 @@ If `<scope>/.plan.md` exists, check each item against the current source before 
 
 Write the Assessment as findings in the contract's finding format, grouped by area (for example, routing, data, UI, tests). Each finding cites `file:line`. A narrative summary may open the section, but it does not replace the findings.
 
-## Frontend additions
+## Items that touch a lens
 
-In every mode, apply this to any item that touches UI. For `improve`, that means each UI finding that becomes a plan item. State:
+When an item touches accessibility, performance, security, UX, or UI, load only that lens from the installed `review` skill (`~/.agents/skills/review/references/`, or the client's equivalent): `security`, `a11y`, `perf`, `ux`, or `ui`. Use its criterion. Do not copy the lens into the plan. UX and UI items use the `D` id.
 
-- the UI states it covers: loading, empty, error, partial, populated;
-- keyboard and focus behaviour for each interactive element;
-- at least one measurable acceptance criterion where relevant, such as "the dialog returns focus to its trigger on close" or "adds no dependency to the client bundle beyond the profile's budget".
+For an item that touches rendered UI, Done when names the states the change can show and one check a test or `~/.agents/klugzeug/browser-verification.md` can observe.
 
 ## Rules
 
@@ -55,4 +53,4 @@ Use the structure in the contract's Plan file section. Start with `Baseline`: th
 
 ## Finish
 
-Present the plan in chat with its top items, then ask: implement the plan as written, promote specific Future items, or promote all. Use `AskQuestion` when it is available; otherwise ask the same question in plain text and wait for the answer. Do not implement from this skill.
+Present the plan in chat with its top items, then ask: implement the plan as written, promote specific Future items, or promote all. Items marked Breaking: Yes stay `[BLOCKED]` until the user confirms them. Use `AskQuestion` when it is available; otherwise ask the same question in plain text and wait for the answer. Do not implement from this skill.

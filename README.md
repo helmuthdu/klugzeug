@@ -10,7 +10,7 @@ A stack-agnostic set of eight agent skills for frontend engineering: plan, build
 | `plan`     | Audits, feature specs, bug triage, and new-module designs in `<scope>/.plan.md`              |
 | `build`    | Implementing, fixing (test first), refactoring, migrating, and upgrading dependencies        |
 | `test`     | Coverage gaps, behaviour-focused tests, flaky-test removal                                   |
-| `review`   | Code, PR, and greenfield reviews; `security`, `a11y`, and `perf` lenses                      |
+| `review`   | Code, PR, and greenfield reviews; `security`, `a11y`, `perf`, `ux`, and `ui` lenses           |
 | `docs`     | Diátaxis guides, JSDoc, README, verified against source                                      |
 | `deliver`  | Commits, branches, PR bodies, change files; only the named action                            |
 | `pipeline` | Ordered stages with approval gates, subagents, and one final validation run                  |
@@ -53,7 +53,7 @@ Resolution order: the user's request, then the profile, then the files the profi
 
 - One shared contract, not a copy in every skill.
 - Each `SKILL.md` is under 110 lines. Checklists and templates live in `references/` and load only when used.
-- Descriptions name the trigger words, and skills do not overlap. Security, accessibility, and performance are lenses of `review`, not separate skills.
+- Descriptions name the trigger words, and skills do not overlap. Security, accessibility, performance, UX, and UI are lenses of `review`, not separate skills.
 - Skills never widen the scope the request sets.
 
 ## Check
