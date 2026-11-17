@@ -1,0 +1,80 @@
+#!/usr/bin/env node
+// Validates every klugzeug skill and the shared files it depends on.
+//   - SKILL.md exists; frontmatter has name (== directory) and description
+//   - SKILL.md stays within the line budget (progressive disclosure)
+//   - every `references/...` or `~/.agents/klugzeug/...` path it names exists
+// Exits 1 on any failure so install.sh can refuse to link a broken set.
+
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const SKILLS = join(ROOT, 'skills');
+const SHARED = join(ROOT, 'shared');
+const MAX_LINES = 110;
+const MAX_DESCRIPTION = 400;
+const SHARED_FILES = ['contract.md', 'browser-verification.md'];
+
+const errors = [];
+const fail = (message) => errors.push(message);
+
+function parseFrontmatter(text) {
+  const match = text.match(/^---\n([\s\S]*?)\n---\n/);
+  if (!match) return null;
+  const fields = {};
+  for (const line of match[1].split('\n')) {
+    const pair = line.match(/^([a-z-]+):\s*(.*)$/);
+    if (pair) fields[pair[1]] = pair[2].replace(/^(['"])(.*)\1$/, '$2');
+  }
+  return fields;
+}
+
+function checkSkill(name) {
+  const dir = join(SKILLS, name);
+  const file = join(dir, 'SKILL.md');
+  if (!existsSync(file)) {
+    fail(`${name}: missing SKILL.md`);
+    return;
+  }
+  const text = readFileSync(file, 'utf8');
+  const fields = parseFrontmatter(text);
+  if (!fields) {
+    fail(`${name}: SKILL.md has no frontmatter block`);
+    return;
+  }
+  if (fields.name !== name) fail(`${name}: frontmatter name "${fields.name}" must equal directory name`);
+  if (!fields.description) fail(`${name}: frontmatter description is missing`);
+  else if (fields.description.length > MAX_DESCRIPTION)
+    fail(`${name}: description is ${fields.description.length} characters (max ${MAX_DESCRIPTION})`);
+
+  const lines = text.split('\n').length;
+  if (lines > MAX_LINES) fail(`${name}: SKILL.md is ${lines} lines (budget ${MAX_LINES}); move detail to references/`);
+
+  const refs = new Set();
+  for (const match of text.matchAll(/`(references\/[\w./-]+\.md)`/g)) refs.add(match[1]);
+  for (const match of text.matchAll(/`~\/\.agents\/klugzeug\/([\w./-]+\.md)`/g)) refs.add(`shared:${match[1]}`);
+  for (const ref of refs) {
+    const path = ref.startsWith('shared:') ? join(SHARED, ref.slice(7)) : join(dir, ref);
+    if (!existsSync(path) || !statSync(path).isFile()) fail(`${name}: referenced file does not exist: ${ref}`);
+  }
+}
+
+for (const file of SHARED_FILES) {
+  if (!existsSync(join(SHARED, file))) fail(`shared/${file} is missing`);
+}
+
+const entries = readdirSync(SKILLS, { withFileTypes: true });
+const skillNames = entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name);
+for (const entry of entries) {
+  if (!entry.isDirectory()) fail(`skills/${entry.name} is not a directory; skills must be folders`);
+}
+if (skillNames.length === 0) fail('no skills found under skills/');
+for (const name of skillNames) checkSkill(name);
+
+if (errors.length > 0) {
+  console.error(`check-skills: ${errors.length} problem(s)`);
+  for (const message of errors) console.error(`  - ${message}`);
+  process.exit(1);
+}
+console.log(`check-skills: ${skillNames.length} skills and ${SHARED_FILES.length} shared files OK`);
