@@ -2,6 +2,8 @@
 
 Trace attacker-controlled input from its source (URL, storage, `postMessage`, API response, user input, file import) to a sink (DOM, eval-like execution, URL navigation, query construction, log, or a stored value). Establish reachability and impact before you report a pattern as a vulnerability. A risky pattern with no reachable path is a `CONCERN`.
 
+If the profile links a project security checklist, apply it as well; it wins where the two differ.
+
 ## Classes to check
 
 **Injection and DOM**

@@ -17,7 +17,7 @@ You will <outcome> in about <time>. You need <prerequisites>.
 <One paragraph. Link to the how-to guides and reference for next steps.>
 ```
 
-Rules: no alternative paths, no explanations longer than one sentence, every step ends with something the reader can check.
+Rules: no alternative paths, no explanations longer than one sentence, every step ends with something the reader can check. Show the expected output at each step, and say what to notice ("Notice that the prompt changed."). Never open with "In this tutorial you will learn…". Run the whole tutorial from a clean state before shipping it.
 
 ## How-to guide
 
@@ -33,7 +33,7 @@ Use this when <situation>. Before you start, you need <prerequisite>.
 Related: [<Reference page>](...)
 ```
 
-Rules: one task, goal in the title, conditions expressed as branches, no teaching of concepts (link to explanation instead).
+Rules: one task, goal in the title ("How to …" or an imperative that names the outcome), written from the user's goal rather than the tool's controls, conditions expressed as branches, no teaching of concepts (link to explanation instead).
 
 ## Reference
 
@@ -46,20 +46,25 @@ Rules: one task, goal in the title, conditions expressed as branches, no teachin
 - Throws: `<ErrorType>` when <condition>
 
 <One sentence describing the behaviour.>
+
+Example (optional, when it clarifies usage):
+```ts
+<runnable usage>
+```
 ```
 
-Rules: complete for its scope, consistent order, no procedures, one entry per public export.
+Rules: complete for its scope, consistent order and structure that mirror the code, no procedures, one entry per public export. Examples illustrate; they do not instruct.
 
 ## Explanation
 
 ```md
-# Why <topic>
+# About <topic>
 
 <The problem.> <The decision.> <The alternatives considered and why they were rejected.>
 <The consequences the reader will meet.>
 ```
 
-Rules: no step-by-step instructions, no reference tables that belong in reference pages (link them), state trade-offs honestly.
+Rules: no step-by-step instructions, no reference tables that belong in reference pages (link them), state trade-offs honestly. Make connections to related topics, give history and context, and present alternatives and differing perspectives. "Why" can head a section, but the page title is "About …". Keep it bounded to one topic.
 
 ## README
 

@@ -2,7 +2,7 @@
 // Validates every klugzeug skill and the shared files it depends on.
 //   - SKILL.md exists; frontmatter has name (== directory) and description
 //   - SKILL.md stays within the line budget (progressive disclosure)
-//   - every `references/...` or `~/.agents/klugzeug/...` path it names exists
+//   - every `references/...` or `~/.agents/klugzeug/...` path named in SKILL.md, its references/, or shared/ exists
 // Exits 1 on any failure so install.sh can refuse to link a broken set.
 
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
@@ -51,17 +51,32 @@ function checkSkill(name) {
   const lines = text.split('\n').length;
   if (lines > MAX_LINES) fail(`${name}: SKILL.md is ${lines} lines (budget ${MAX_LINES}); move detail to references/`);
 
+  const referencesDir = join(dir, 'references');
+  const sources = [text];
+  if (existsSync(referencesDir)) {
+    for (const entry of readdirSync(referencesDir)) {
+      if (entry.endsWith('.md')) sources.push(readFileSync(join(referencesDir, entry), 'utf8'));
+    }
+  }
+  checkRefs(name, dir, sources);
+}
+
+function checkRefs(label, dir, sources) {
   const refs = new Set();
-  for (const match of text.matchAll(/`(references\/[\w./-]+\.md)`/g)) refs.add(match[1]);
-  for (const match of text.matchAll(/`~\/\.agents\/klugzeug\/([\w./-]+\.md)`/g)) refs.add(`shared:${match[1]}`);
+  for (const source of sources) {
+    for (const match of source.matchAll(/`(references\/[\w./-]+\.md)`/g)) refs.add(match[1]);
+    for (const match of source.matchAll(/`~\/\.agents\/klugzeug\/([\w./-]+\.md)`/g)) refs.add(`shared:${match[1]}`);
+  }
   for (const ref of refs) {
     const path = ref.startsWith('shared:') ? join(SHARED, ref.slice(7)) : join(dir, ref);
-    if (!existsSync(path) || !statSync(path).isFile()) fail(`${name}: referenced file does not exist: ${ref}`);
+    if (!existsSync(path) || !statSync(path).isFile()) fail(`${label}: referenced file does not exist: ${ref}`);
   }
 }
 
 for (const file of SHARED_FILES) {
-  if (!existsSync(join(SHARED, file))) fail(`shared/${file} is missing`);
+  const path = join(SHARED, file);
+  if (!existsSync(path)) fail(`shared/${file} is missing`);
+  else checkRefs(`shared/${file}`, SHARED, [readFileSync(path, 'utf8')]);
 }
 
 const entries = readdirSync(SKILLS, { withFileTypes: true });

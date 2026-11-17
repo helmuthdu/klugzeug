@@ -73,7 +73,7 @@ Security findings prefix the class: `[VULN High]` for a confirmed exploitable is
 
 ## Plan file
 
-`<scope>/.plan.md` is the worklist shared by `plan`, `build`, `review`, and `pipeline`.
+`<scope>/.plan.md` is the worklist shared by `plan`, `build`, `review`, and `pipeline`. When the profile names another plan location, use that. A plan file is never committed unless the profile says it is.
 
 - One active plan per scope. Replace a completed or obsolete plan only with the user's direction.
 - Item IDs: `B` bug, `D` design, `F` feature, `T` tests, `P` performance, `A` accessibility, `S` security, `X` docs. Order: bugs first, then by impact per effort.
@@ -86,7 +86,7 @@ Give each subagent its scope, the question to answer, the evidence to return, th
 
 ## Report
 
-End every task with:
+End every task with the following, unless the skill defines its own report. A skill's report still lists the validation run and the open markers.
 
 - **Changed**: files, grouped by surface.
 - **Validation**: each command and its result; commands not run, with the reason.

@@ -30,7 +30,7 @@ Copy this structure into `AGENTS.md`. Delete any field that does not apply; mark
 | ---------------------- | --------------------------------------------------------- |
 | Source                 | `<focused tests>`, `<lint>`, `<build>`                   |
 | Public API             | source gates plus `<docs validator>`                     |
-| UI behaviour           | source gates plus browser verification (`shared/browser-verification.md`) |
+| UI behaviour           | source gates plus browser verification (`~/.agents/klugzeug/browser-verification.md`) |
 | Tests only             | focused tests; lint when config changes                  |
 | Config or tooling      | `<tool tests>`, smoke run of the changed script           |
 | Docs                   | `<docs validator>`, `<docs build>`                       |

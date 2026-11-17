@@ -20,7 +20,8 @@ Read `~/.agents/klugzeug/contract.md` and the profile. This skill owns delivery 
 1. Split the work by logical change: one commit per coherent change.
 2. Write the subject in the profile's convention (for example `type(scope): summary` for conventional commits). Read recent subjects only to match style.
 3. Add a body when it helps: why, not what. Note breaking changes and their migration.
-4. Use the branch the request names. Otherwise create a new branch from the base branch. Never commit to a protected base branch.
+4. Use the branch the request names. Otherwise commit on the current branch. Only when the current branch is a protected base branch, create a new branch from it. Never commit to a protected base branch.
+5. Never stage a plan file (`.plan.md`) unless the profile says plans are committed.
 
 ## Pull request body
 

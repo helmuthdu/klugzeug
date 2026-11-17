@@ -26,7 +26,9 @@ Usage: install.sh [--dry-run] [--uninstall] [--client <dir>]...
   --uninstall     Remove links that point into this repository or into the canonical folder.
 
 Environment:
-  KLUGZEUG_HOME   Canonical agent folder (default: ~/.agents).
+  KLUGZEUG_HOME   Canonical agent folder (default: ~/.agents). Skills read
+                  ~/.agents/klugzeug/contract.md by that literal path, so set this
+                  only for test installs.
 EOF
 }
 

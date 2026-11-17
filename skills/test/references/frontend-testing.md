@@ -1,5 +1,7 @@
 # Frontend testing reference
 
+Names below are Testing Library's. When the profile declares other DOM-testing helpers, map each rule to their equivalent; the principles stay the same.
+
 ## Query priority
 
 Use the first query that works for the element:

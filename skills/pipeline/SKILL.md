@@ -13,10 +13,12 @@ Read `~/.agents/klugzeug/contract.md` and the profile. Establish the mode first:
 
 ## Stages
 
+Each stage follows its own skill (`~/.agents/skills/<stage>/SKILL.md`, or the client's equivalent). Load it before running the stage, and name it in a subagent's brief.
+
 1. **plan**: write or validate `<scope>/.plan.md`. Present the plan and wait.
 2. **build**: an approval gate. Runs only after the user approves the plan items, or a named subset. Skipped in assess mode.
 3. **test**: gap analysis. Writes tests only inside the approved scope.
-4. **review**: the `code` lens, plus `security`, `a11y`, or `perf` when the scope touches those areas. A finding is `— FIXED` only when step 2 fixed it under approval; otherwise it stays open.
+4. **review**: the `code` lens, plus `security`, `a11y`, or `perf` when the scope touches those areas. Present the findings. Fixing them needs approval and a second `build` pass; re-review only the fixed findings. A finding is `— FIXED` only after that pass; otherwise it stays open.
 5. **docs**: updates only the pages that the approved change touches.
 6. **deliver**: runs only when the request names a delivery action (commit, PR body). Otherwise stop after `docs` and report.
 

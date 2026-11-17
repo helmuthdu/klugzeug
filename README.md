@@ -33,7 +33,7 @@ Ownership: `review` finds problems and never edits; `build` edits; `deliver` onl
 
 The installer first runs `scripts/check-skills.mjs` and refuses to link a broken set. It never overwrites a path that is not a link into this repository; it reports the collision.
 
-Before relying on a client, confirm that it reads the folder you linked (`[VERIFY]` for each client). Clients that discover skills only inside the repository, such as Copilot, need a file inside the repo and will not see the global install.
+Before relying on a client, confirm that it reads the folder you linked. Cursor reads `~/.agents/skills` directly; Claude Code needs `--client ~/.claude/skills`; other clients are `[VERIFY]`. Clients that discover skills only inside the repository, such as Copilot, need a file inside the repo and will not see the global install.
 
 ## Project profile
 
