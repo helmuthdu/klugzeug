@@ -34,7 +34,7 @@ Pass between stages only: the plan file with its status markers, the approved sc
 
 ## Validation
 
-Each stage runs its focused checks. The aggregate gates from the profile (lint, typecheck, full tests, build, and docs or e2e where declared) run once, after all approved changes are in. Assess-only runs run no aggregate gates unless the user asks for them.
+Each stage runs its focused checks. The aggregate gates from the profile (**Lint**, **Typecheck**, **Test (all)**, **Build**, and **Docs** or **E2E** where set) run once, after all approved changes are in. Assess-only runs run no aggregate gates unless the user asks for them.
 
 ## Stop conditions
 

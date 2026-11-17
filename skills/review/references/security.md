@@ -2,9 +2,9 @@
 
 Trace attacker-controlled input from its source (URL, storage, `postMessage`, API response, user input, file import) to a sink (DOM, eval-like execution, URL navigation, query or command construction, a filesystem path, an outbound request, a log, or a stored value). Establish reachability and impact before you report a pattern as a vulnerability. A risky pattern with no reachable path is a `CONCERN`.
 
-If the profile links a project security checklist, apply it as well; it wins where the two differ.
+If **Security checklist** is set, apply it as well; it wins where the two differ.
 
-Confirm a finding by reading the source. Never send an exploit payload, a scanner, or a proof of concept to a deployed environment. A runtime check runs only against a local server the profile starts.
+Confirm a finding by reading the source. Never send an exploit payload, a scanner, or a proof of concept to a deployed environment. A runtime check runs only against a local server started through **Dev command**.
 
 Cite a CWE identifier in the finding when one fits.
 
@@ -52,7 +52,7 @@ Cite a CWE identifier in the finding when one fits.
 **Types and dependencies**
 - `as unknown as T`, unchecked `any`, or `!` hiding a real null path on untrusted data.
 - Production code importing a dev-only dependency.
-- Known-vulnerable packages, shown by the profile's audit command. Report only with that evidence.
+- Known-vulnerable packages, shown by **Audit command**. Report only with that evidence.
 - A dependency added in the change whose install script (`preinstall`, `install`, `postinstall`) runs code. Report it as a `CONCERN` with what the script executes; a script you could not read is `[VERIFY]`.
 - A direct dependency resolved to a version the manifest range excludes, or present in the lockfile with no manifest entry. Report both versions.
 

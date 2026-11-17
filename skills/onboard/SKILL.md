@@ -16,11 +16,11 @@ Read `~/.agents/klugzeug/contract.md`. Onboarding reads the repository and write
 4. **Conventions**: `AGENTS.md`, `CONTRIBUTING*`, `.agents/`, `.github/pull_request_template.md`, `CHANGELOG*`, change-file tooling, release docs, and protected branch names.
 5. **Boundaries**: CI workflow directories, generated folders, committed build output, and any "do not edit" notes.
 6. **Plan file**: where `.plan.md` would live, whether `.gitignore` covers it, and whether plans are committed.
-7. **References the other skills read**, linking a file only when it exists: design system or tokens, security checklist, doc or README templates, test helpers (query, interaction, network), and an accessibility target when the project states one. The a11y lens defaults to WCAG 2.2 Level A and AA.
+7. **Every profile key** in `~/.agents/klugzeug/contract.md` → **Profile keys**: detect a value for each one, or record `none` when the project has no such thing. Link a file only when it exists. Never leave a key blank. The a11y lens defaults to WCAG 2.2 Level A and AA when the accessibility target is unset.
 
 ## 2. Draft
 
-Use `references/profile-template.md`. Every command must come from a script or config you read. Fields you cannot confirm are `[VERIFY]`. Link to convention files only if they exist. Keep the section short (about 60 lines); move rules that apply only sometimes into the files it links.
+Use `references/profile-template.md`. Every command must come from a script or config you read. Fields you cannot confirm are `[VERIFY]`. Link to convention files only if they exist. The template lists every profile key, so the section runs about 90 lines; keep rules that apply only sometimes in the files it links.
 
 ## 3. Write (after approval)
 
@@ -36,4 +36,4 @@ When the profile exists: re-detect each field, and show only the fields that cha
 
 - Profile: created, refreshed, or unchanged.
 - Fields marked `[VERIFY]`, with the reason for each.
-- Lookups that found nothing (for example, no e2e script), so the user knows what klugzeug will not check.
+- Keys set to `none`, and lookups that found nothing (for example, no e2e script), so the user knows what klugzeug will not check.

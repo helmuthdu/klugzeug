@@ -3,6 +3,7 @@
 //   - SKILL.md exists; frontmatter has name (== directory) and description
 //   - SKILL.md stays within the line budget (progressive disclosure)
 //   - every `references/...` or `~/.agents/klugzeug/...` path named in SKILL.md, its references/, or shared/ exists
+//   - every key in shared/contract.md "## Profile keys" has a row in the onboard profile template
 // Exits 1 on any failure so install.sh can refuse to link a broken set.
 
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
@@ -12,6 +13,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SKILLS = join(ROOT, 'skills');
 const SHARED = join(ROOT, 'shared');
+const PROFILE_TEMPLATE = join(SKILLS, 'onboard', 'references', 'profile-template.md');
 const MAX_LINES = 110;
 const MAX_DESCRIPTION = 400;
 const SHARED_FILES = ['contract.md', 'browser-verification.md'];
@@ -78,6 +80,37 @@ for (const file of SHARED_FILES) {
   if (!existsSync(path)) fail(`shared/${file} is missing`);
   else checkRefs(`shared/${file}`, SHARED, [readFileSync(path, 'utf8')]);
 }
+
+// Profile keys are the contract's canonical vocabulary. The onboard template must carry a row for
+// each one (`| Key | ... |`), so `onboard` never writes a profile that skills cannot read.
+function profileKeys(contract) {
+  const lines = contract.split('\n');
+  const start = lines.indexOf('## Profile keys');
+  if (start === -1) return null;
+  const keys = [];
+  for (const line of lines.slice(start + 1)) {
+    if (line.startsWith('## ')) break;
+    if (!line.startsWith('- ')) continue;
+    for (const match of line.matchAll(/\*\*(.+?)\*\*:/g)) keys.push(match[1]);
+  }
+  return keys;
+}
+
+function checkProfileKeys() {
+  const keys = profileKeys(readFileSync(join(SHARED, 'contract.md'), 'utf8'));
+  if (!keys) return fail('shared/contract.md has no "## Profile keys" section');
+  if (keys.length === 0) return fail('shared/contract.md "## Profile keys" lists no keys');
+  if (!existsSync(PROFILE_TEMPLATE)) return fail('skills/onboard/references/profile-template.md is missing');
+  const template = readFileSync(PROFILE_TEMPLATE, 'utf8');
+  for (const key of keys) {
+    const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    if (!new RegExp(`^\\|\\s*${escaped}\\s*\\|`, 'm').test(template)) {
+      fail(`profile-template.md has no row for profile key "${key}"`);
+    }
+  }
+}
+
+checkProfileKeys();
 
 const entries = readdirSync(SKILLS, { withFileTypes: true });
 const skillNames = entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name);

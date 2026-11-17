@@ -2,9 +2,9 @@
 
 Use this procedure when a change alters rendered UI, client-side behaviour, or an interaction that tests cannot observe. Skip it for logic covered by tests.
 
-1. **Start**: run the dev command from the project profile and wait until the URL responds. If the profile declares no dev command, mark `[VERIFY]` and stop.
+1. **Start**: run **Dev command** for the target the task names (one command per target when the profile lists several) and wait until the URL responds. If it is `none`, mark `[VERIFY]` and stop.
 2. **Target**: choose the route or story the task named. List the states to exercise: loading, empty, error, populated, and any state the change adds.
-3. **Tool**: use the browser tooling available in this session. If none is available, use the browser-test command the profile declares. If neither exists, mark `[VERIFY]` and list what a person should check.
+3. **Tool**: use the browser tooling available in this session. If none is available, use **Browser-test command**. If neither exists, mark `[VERIFY]` and list what a person should check.
 4. **Checks per state**:
    - renders with no console errors and no uncaught exceptions;
    - no failed requests and no unexpected 4xx or 5xx responses for the flow;

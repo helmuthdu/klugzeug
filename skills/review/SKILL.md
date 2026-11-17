@@ -20,11 +20,11 @@ If the request names a lens, load only that lens file.
 ## Code checklist
 
 - **Correctness**: off-by-one errors, wrong defaults, incorrect narrowing, swallowed errors, unhandled promise rejections, races between async work and disposal or navigation. Also: navigation and link targets that reach the wrong route, and defaults that hide missing data (`?? {}`, `?? 0`, empty `catch`) where the caller needs to know.
-- **Contracts**: naming and parameter order; options objects for three or more parameters; errors surfaced at the boundary that owns them, using the project's error types; public return shapes that follow the project's convention (from the profile).
+- **Contracts**: naming and parameter order; options objects for three or more parameters; errors surfaced at the boundary that owns them, using the **Error types** key; public return shapes that follow **Return-shape convention**.
 - **Types**: unnecessary or unsafe casts and escape hatches the language provides (`as`, `!`, `any` in TypeScript); invariants that the types could express; public types that prevent misuse.
-- **UI state**: derived values computed from their inputs, not stored; side effects that only copy state or repeat a fetch; event handlers doing work that belongs in the data layer. Use the profile's reactivity model. Initial request parameters must agree with the initial UI controls, and reset must return to the same defaults as the first render.
-- **Data fetching**: with a query cache, keys follow the project's key convention rather than ad-hoc inline literals; dependent queries guarded; no duplicate requests; responses not applied after the owner is gone or a newer request has superseded them.
-- **Text**: user-facing strings through the project's translation mechanism, when it has one.
+- **UI state**: derived values computed from their inputs, not stored; side effects that only copy state or repeat a fetch; event handlers doing work that belongs in the data layer. Use **Reactivity model**. Initial request parameters must agree with the initial UI controls, and reset must return to the same defaults as the first render.
+- **Data fetching**: with a query cache, keys follow **Query key convention** rather than ad-hoc inline literals; dependent queries guarded; no duplicate requests; responses not applied after the owner is gone or a newer request has superseded them.
+- **Text**: user-facing strings through **Translation mechanism**; skip this item when it is `none`.
 - **Dependencies and dead code**: unused imports, exports, and packages; module cycles.
 - **Tests**: behaviour-focused, aligned with the public API, not over-mocked (see `test`).
 

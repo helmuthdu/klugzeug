@@ -4,15 +4,63 @@ Every klugzeug skill follows these rules. The skill says what to do; this file s
 
 ## Project profile
 
-Project facts (commands, stack, validation gates, conventions) come from the nearest `AGENTS.md` section titled `## Project profile`, resolved in this order:
+Project facts (commands, stack, validation gates, conventions) come from the `## Project profile` section of an `AGENTS.md`, resolved in this order:
 
 1. The user's instruction in the current request.
-2. The `## Project profile` section of the nearest `AGENTS.md`, walking up from the target path.
+2. The profile: walk up from the target path and use the first `AGENTS.md` that contains a `## Project profile` section. Files without that section are skipped; they do not end the search.
 3. Files that the profile links (conventions, references).
 4. Detection: `package.json` scripts, lockfile (`bun.lock`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`), tool configs (vitest, jest, playwright, biome, eslint, `tsconfig*.json`).
 5. Ask the user, as a `[BLOCKED]` decision.
 
+**Subtree rules.** Every `AGENTS.md` on the walk from the target to the profile file is a rule set for its own subtree. Its rules bind edits inside that subtree, in addition to the profile. A nearer rule wins for its subtree. A rule that conflicts with the profile is a `[BLOCKED]` decision.
+
+**Profile keys.** A skill refers to a project fact by the key name in the list below. Every key is either a value or `none`. A key set to `none` is skipped and listed in the report, never inferred. A key that is absent is `[VERIFY]`.
+
 A command found only by guessing is marked `[VERIFY]` and never reported as run. If no profile exists, say so and suggest `onboard`; do not invent commands.
+
+## Profile keys
+
+Canonical names. `onboard` writes each one into the profile; `check-skills` fails if the template omits one.
+
+- **Install**: install command.
+- **Dev command**: command that starts the app for browser checks. When a repository has several apps, list one per target.
+- **Browser-test command**: command that runs browser tests against a running app, when the project has one.
+- **Test (all)**: full test command.
+- **Test (one file)**: command for a single test file.
+- **Lint**: lint command.
+- **Lint fix**: command that applies fixes.
+- **Typecheck**: command that type-checks without emitting.
+- **Build**: build command.
+- **E2E**: browser end-to-end command.
+- **Docs**: docs validators and docs build.
+- **Analyse command**: command that reports bundle or chunk sizes.
+- **Bundle budget**: size limits per entry or route.
+- **Performance measurement command**: lab tool that measures Core Web Vitals (for example Lighthouse).
+- **Audit command**: dependency vulnerability audit.
+- **Packed-package check**: command that verifies a release artifact before publishing.
+- **Change-file command**: command that records a pending release note.
+- **Test layers**: which layers exist (unit, component, integration, e2e, visual).
+- **Query helper**: DOM query API, role-first.
+- **Interaction helper**: user-level interaction API.
+- **Network helper**: HTTP-boundary mocking API.
+- **Visual baseline**: visual regression workflow.
+- **Reactivity model**: how state updates reach the UI.
+- **Translation mechanism**: how user-facing strings are translated.
+- **Error types**: the project's error classes and where they live.
+- **Return-shape convention**: how public functions return results (values, nullable, or result objects).
+- **Query key convention**: how data-cache keys are built.
+- **Large-list approach**: virtualization or pagination used at a given list size.
+- **Design system**: tokens, component library, and design guidelines.
+- **Accessibility target**: standard and level, for example WCAG 2.2 AA.
+- **Security checklist**: project vulnerability checklist.
+- **Doc templates**: templates for docs and README pages.
+- **PR template**: pull-request template path.
+- **Commit convention**: commit message format.
+- **Runtime and package manager**: runtime version and package manager.
+- **Plan file**: plan location, whether git ignores it, and whether it is committed.
+- **Protected paths**: paths that need explicit approval to change.
+- **Protected branches**: branches no skill may commit to.
+- **Public API entry points**: files that define public exports.
 
 ## Write scope
 
@@ -73,7 +121,7 @@ Security findings prefix the class: `[VULN High]` for a confirmed exploitable is
 
 ## Plan file
 
-`<scope>/.plan.md` is the worklist shared by `plan`, `build`, `review`, and `pipeline`. When the profile names another plan location, use that. A plan file is never committed unless the profile says it is.
+`<scope>/.plan.md` is the worklist shared by `plan`, `build`, `review`, and `pipeline`. When **Plan file** names another location, use that. A plan file is never committed unless **Plan file** says it is.
 
 - One active plan per scope. Replace a completed or obsolete plan only with the user's direction.
 - Item IDs: `B` bug, `D` design, `F` feature, `T` tests, `P` performance, `A` accessibility, `S` security, `X` docs. Order: bugs first, then by impact per effort.

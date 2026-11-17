@@ -1,6 +1,6 @@
 # Frontend testing reference
 
-Behaviour-first rules for component and DOM tests. The profile names the query, interaction, and network helpers. Use those APIs. This file does not name a library.
+Behaviour-first rules for component and DOM tests. The **Query helper**, **Interaction helper**, and **Network helper** keys name the APIs. Use those APIs. This file does not name a library.
 
 ## Query priority
 
@@ -13,7 +13,7 @@ Prefer lookups that match what a user can perceive:
 
 A failed role lookup often means the element has no accessible name. That is a finding for `review a11y`, not a reason to default to test ids.
 
-When the UI uses shadow DOM or slots, use the profile's helpers for crossing those boundaries. Stay inside the component's root; do not query the whole document when a scoped root exists.
+When the UI uses shadow DOM or slots, use the helpers named by **Query helper** and **Interaction helper** for crossing those boundaries. Stay inside the component's root; do not query the whole document when a scoped root exists.
 
 ## Interaction
 
@@ -29,7 +29,7 @@ When the UI uses shadow DOM or slots, use the profile's helpers for crossing tho
 
 ## Network
 
-- Mock at the HTTP boundary the profile declares, so the real client code runs.
+- Mock at the HTTP boundary that **Network helper** names, so the real client code runs.
 - Reset handlers between tests. Cover the empty, error, and populated responses for each request the UI uses.
 
 ## Anti-patterns

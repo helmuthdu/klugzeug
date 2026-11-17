@@ -6,9 +6,9 @@ Measure a production build, on the same machine and with the same throttling as 
 
 ## What to measure
 
-- **Bundle**: size of the affected entry or chunk, before and after. Use the profile's analyse or build-report command. Compare with the profile's budget when it has one.
+- **Bundle**: size of the affected entry or chunk, before and after. Use **Analyse command**. Compare with **Bundle budget** when it is set.
 - **Loading**: request waterfalls (a request that waits for another that could run in parallel), large unused code loaded on the initial route, missing code splitting for heavy routes or dialogs, and unbounded image sizes or missing dimensions.
-- **Updates**: repeated work when the inputs are unchanged, shared values recreated so many dependents update, large lists without the virtualization the profile uses at that size, and expensive computation on a hot path. Map these to the profile's reactivity model.
+- **Updates**: repeated work when the inputs are unchanged, shared values recreated so many dependents update, large lists without the approach named by **Large-list approach** for that size, and expensive computation on a hot path. Map these to **Reactivity model**.
 - **Interaction**: synchronous work in an input handler that blocks the main thread long enough to miss the INP target below.
 - **Caching**: repeated identical requests, missing cache time or stale time where the data is stable, and fetches that could be deduplicated by the query layer.
 - **Memory**: listeners, timers, observers, or subscriptions that are never released, so retained memory grows on each navigation or update. Show the growth across repeated actions.
@@ -20,14 +20,14 @@ The stable Core Web Vitals are Largest Contentful Paint (LCP), Interaction to Ne
 
 The same thresholds apply on mobile and desktop. Good is LCP within 2.5 seconds, INP within 200 milliseconds, and CLS of 0.1 or less. Poor is LCP over 4 seconds, INP over 500 milliseconds, and CLS over 0.25. Judge a page on the 75th percentile of real visits, and report mobile and desktop separately when both exist.
 
-A lab run does not decide pass or fail. Lighthouse, when the profile declares it, measures LCP and CLS. A lab load has no user input, so it reports Total Blocking Time where INP would be; treat that as a lab stand-in. Name the tool, the page, the throttling profile, and the run count with every number. When the profile has no field data, mark the field outcome `[VERIFY]`.
+A lab run does not decide pass or fail. Lighthouse, when **Performance measurement command** names it, measures LCP and CLS. A lab load has no user input, so it reports Total Blocking Time where INP would be; treat that as a lab stand-in. Name the tool, the page, the throttling profile, and the run count with every number. When the profile has no field data, mark the field outcome `[VERIFY]`.
 
 Use the browser tooling (`~/.agents/klugzeug/browser-verification.md`) when the page renders locally.
 
 ## Severity
 
 - **Critical**: the page hangs, crashes, or retained memory grows until the page fails.
-- **High**: a core route is in the poor band above, or over the profile's budget.
+- **High**: a core route is in the poor band above, or over **Bundle budget**.
 - **Medium**: a measured regression with a bounded effect, or a hot path whose cost is inferred.
 - **Low**: a source-backed saving with a small measured effect.
 

@@ -38,7 +38,7 @@ For an item that touches rendered UI, Done when names the states the change can 
 
 ## Output: `<scope>/.plan.md`
 
-Use the structure in the contract's Plan file section. Start with `Baseline`: the profile's test, lint, and typecheck status if already known, otherwise `not run`. Each item:
+Use the structure in the contract's Plan file section. Start with `Baseline`: the **Test (all)**, **Lint**, and **Typecheck** status if already known, otherwise `not run`. Each item:
 
 ```md
 ### <ID> — <title>

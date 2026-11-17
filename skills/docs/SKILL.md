@@ -21,7 +21,7 @@ Test a doubtful page with the compass: is the content about action or cognition,
 | Reference    | looking a fact up while working            | noun "… options"         | facts, signatures, defaults; no steps        |
 | Explanation  | wants to understand why                    | topic "About …"          | reasons, context, trade-offs; no procedures  |
 
-A fact taken from a procedure belongs in reference. A reason belongs in explanation. State each fact once in reference and link to it from everywhere else. When the profile links doc or README templates, they win; otherwise use `references/diataxis.md`.
+A fact taken from a procedure belongs in reference. A reason belongs in explanation. State each fact once in reference and link to it from everywhere else. When **Doc templates** is set, those templates win; otherwise use `references/diataxis.md`.
 
 ## Flow
 
@@ -29,9 +29,9 @@ A fact taken from a procedure belongs in reference. A reason belongs in explanat
 2. Verify each claim. Anything you cannot verify is `[VERIFY]`, not written as fact.
 3. **JSDoc** on each public export: a one-sentence summary; parameters and return value when they are not obvious; thrown errors; one short example for a non-trivial API. Do not restate the type.
 4. For an API change, update reference first, then the pages that describe it, then the examples.
-5. Run tutorials end to end; they must work for every reader. A tutorial you cannot run is `[VERIFY]`. Run other examples, or type-check them, when the profile allows. Otherwise mark them `[VERIFY]`.
+5. Run tutorials end to end; they must work for every reader. A tutorial you cannot run is `[VERIFY]`. Run other examples when the profile names a command for them, or type-check them when **Typecheck** is set. Otherwise mark them `[VERIFY]`.
 6. When a page is added, removed, or renamed, update navigation and indexes.
-7. Run the profile's docs validators and build once, after all doc edits.
+7. Run the **Docs** key's validators and build once, after all doc edits.
 
 ## Rules
 

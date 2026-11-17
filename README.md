@@ -37,17 +37,9 @@ Before relying on a client, confirm that it reads the folder you linked. Cursor 
 
 ## Project profile
 
-`onboard` writes a section like this into `AGENTS.md`. The skills read it before running anything:
+`onboard` writes a `## Project profile` section into `AGENTS.md` using the canonical **Profile keys** from `shared/contract.md` (commands, test helpers, validation gates, conventions). Each key is a value or `none`. The template is `skills/onboard/references/profile-template.md`; `check-skills` fails when the template omits a key.
 
-```md
-## Project profile
-- Commands: install, dev, test, single-file test, lint, typecheck, build, e2e, docs
-- Validation gates by changed surface
-- Plan file location and whether git ignores it
-- Project rules that always apply, and protected paths
-```
-
-Resolution order: the user's request, then the profile, then the files the profile links, then detection from `package.json` and config files, then a question to the user. A command that is only guessed is marked `[VERIFY]` and never reported as run.
+Resolution order: the user's request, then the profile (walk up until an `AGENTS.md` contains `## Project profile`), then linked files, then detection from `package.json` and config files, then a question to the user. Subtree rules in nearer `AGENTS.md` files bind their directories. A command that is only guessed is marked `[VERIFY]` and never reported as run.
 
 ## Design rules
 

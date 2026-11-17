@@ -8,8 +8,8 @@ A style preference alone is never a finding. Every finding names the reference i
 
 Before judging, name the product's purpose, audience, and design language, taken from the README, the profile, or the screens themselves, and judge the design against that. Recommend a different colour, font, layout, or animation only when the current one conflicts with one of these references.
 
-1. **The project's design system**: design tokens, the component library, and any design guidelines the profile links. A departure from these is a finding at its full severity.
-2. **The reviewed screens' own patterns**: when the profile links no design system, compare against what the screens in scope already repeat (the spacing steps, type sizes, colours, and components used most). Name the repeated pattern and where it appears.
+1. **The project's design system**: design tokens, the component library, and any design guidelines named by **Design system**. A departure from these is a finding at its full severity.
+2. **The reviewed screens' own patterns**: when **Design system** is `none`, compare against what the screens in scope already repeat (the spacing steps, type sizes, colours, and components used most). Name the repeated pattern and where it appears.
 3. **General visual-design principles**: only when neither of the above settles it. Report as `Low` when source-backed, otherwise `[VERIFY]`. Do not impose an outside design system.
 
 ## Evidence

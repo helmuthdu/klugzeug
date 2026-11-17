@@ -23,7 +23,7 @@ Read `~/.agents/klugzeug/contract.md` and the project profile (commands, validat
 3. **Test first for bugs**: write a test that reproduces the reported behaviour and confirm it fails for the reported reason. Then fix.
 4. **Edit as one unit**: implementation, exports, types, tests, and the docs that describe the changed behaviour, together. Never leave a half-migrated surface.
 5. **Propagate**: search for the same root cause in sibling code with `rg` (add `--hidden` for renames). Fix equivalent occurrences only when they are in scope and verifiable; report the rest as `[DEFERRED]`. Do not propagate on style similarity alone.
-6. **Validate**: focused checks while iterating, then the profile's gates for each changed surface, run once and batched. Run the profile's lint-fix on the files this change touched before the final gate.
+6. **Validate**: focused checks while iterating, then the profile's gates for each changed surface, run once and batched. Run **Lint fix** on the files this change touched before the final gate.
 7. **Record**: mark the plan item `— DONE`, `— FIXED`, `— OBSOLETE`, or `— NO CHANGE NEEDED`. A review finding this pass fixed is `— FIXED`. For bug fixes, name the regression test.
 
 ## Flows by request

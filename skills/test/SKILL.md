@@ -6,7 +6,7 @@ argument-hint: '<scope path> [focus] [audit-only]'
 
 # test
 
-Read `~/.agents/klugzeug/contract.md` and the profile's test commands and layers. Assess by default: report gaps. Change tests only when the request asks for it (add, write, fix, clean up, improve). A focus narrows the area; a large scope is audited one module at a time.
+Read `~/.agents/klugzeug/contract.md` and the profile's **Test (all)**, **Test (one file)**, and **Test layers** keys. Assess by default: report gaps. Change tests only when the request asks for it (add, write, fix, clean up, improve). A focus narrows the area; a large scope is audited one module at a time.
 
 ## 1. Baseline
 
@@ -28,9 +28,9 @@ Also flag existing tests that are obsolete, duplicated, brittle (asserting struc
 ## 3. Write tests (when authorised)
 
 - One `describe` per unit. Each `it` names one observable behaviour: "shows a retry button after a failed save", never "works".
-- Query by role, label, and text with the DOM helper the profile declares. Use test ids or selectors only when nothing accessible exists, and say why.
-- Interact the way a user does, with the profile's interaction helper. Assert on what is visible, not on private state.
-- Mock at the network boundary when the profile declares one. Mock modules only for true externals: clock, storage, browser APIs.
+- Query by role, label, and text with the **Query helper** key. Use test ids or selectors only when nothing accessible exists, and say why.
+- Interact the way a user does, with the **Interaction helper** key. Assert on what is visible, not on private state.
+- Mock at the network boundary that **Network helper** names. Mock modules only for true externals: clock, storage, browser APIs.
 - Make time, randomness, and scheduling deterministic with fake timers or injected clocks. No fixed sleeps.
 - An async test that asserts inside a callback must fail when that callback never runs. Use the runner's helper for that when it has one (for example `expect.assertions(n)`).
 - Snapshot only stable, human-readable output.
@@ -39,13 +39,13 @@ Also flag existing tests that are obsolete, duplicated, brittle (asserting struc
 
 ## 4. Layers
 
-Use the layers the profile declares. Put each test in the lowest layer that can observe the behaviour:
+Use the layers in **Test layers**. Put each test in the lowest layer that can observe the behaviour:
 
 - **unit**: pure functions and modules;
 - **component**: rendering and interaction (query order and async patterns in `references/frontend-testing.md`);
 - **integration**: several modules, including the network layer;
 - **e2e**: real browser, critical flows only;
-- **visual**: only when the profile has a visual baseline workflow.
+- **visual**: only when **Visual baseline** is set.
 
 ## 5. Flakiness
 
@@ -53,7 +53,7 @@ Rerun the failing file alone to classify it. A test that passes alone and fails 
 
 ## Validation
 
-Iterate with single-file runs. After standalone test changes, run the profile's full test command once. Report results against the Before, Added, Removed, and Rewritten counts below.
+Iterate with single-file runs. After standalone test changes, run **Test (all)** once. Report results against the Before, Added, Removed, and Rewritten counts below.
 
 ## Report
 
