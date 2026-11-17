@@ -28,9 +28,9 @@ Also flag existing tests that are obsolete, duplicated, brittle (asserting struc
 ## 3. Write tests (when authorised)
 
 - One `describe` per unit. Each `it` names one observable behaviour: "shows a retry button after a failed save", never "works".
-- Query by role, label, and text. Use test IDs or class selectors only when nothing accessible exists, and say why.
-- Interact the way a user does (`userEvent` or the project's equivalent). Assert on what is visible, not on state or hook internals.
-- Mock at the network boundary when the project has network-level mocks (MSW or equivalent). Mock modules only for true externals: clock, storage, browser APIs.
+- Query by role, label, and text with the DOM helper the profile declares. Use test ids or selectors only when nothing accessible exists, and say why.
+- Interact the way a user does, with the profile's interaction helper. Assert on what is visible, not on private state.
+- Mock at the network boundary when the profile declares one. Mock modules only for true externals: clock, storage, browser APIs.
 - Make time, randomness, and scheduling deterministic with fake timers or injected clocks. No fixed sleeps.
 - Use `expect.assertions(n)` in async tests that assert inside callbacks.
 - Snapshot only stable, human-readable output.

@@ -7,7 +7,7 @@ If the profile links a project security checklist, apply it as well; it wins whe
 ## Classes to check
 
 **Injection and DOM**
-- `innerHTML`, `outerHTML`, `insertAdjacentHTML`, `document.write`, `dangerouslySetInnerHTML` receiving non-constant data.
+- Raw HTML sinks (`innerHTML`, `outerHTML`, `insertAdjacentHTML`, `document.write`, and any framework helper that writes unsanitized HTML) receiving non-constant data.
 - `eval`, `new Function`, dynamic `import()` or `<script>` with a user-controlled path or URL.
 - URLs in `href`, `src`, `formaction`, or `window.location` with unvalidated schemes (`javascript:`, `data:`) or user-controlled hosts (open redirect).
 - Server-side rendering that interpolates request data into HTML or script tags without escaping.
@@ -21,7 +21,7 @@ If the profile links a project security checklist, apply it as well; it wins whe
 - RegExp built from user input (ReDoS), or catastrophic patterns on untrusted strings.
 
 **Secrets and leakage**
-- Secrets, tokens, or PII in the client bundle, in `VITE_`/`NEXT_PUBLIC_`-style variables, in URLs, or in logs.
+- Secrets, tokens, or PII in the client bundle, in environment variables the bundler inlines into client code, in URLs, or in logs.
 - Stack traces or internal details returned to the user.
 - Tokens in `localStorage` or `sessionStorage` when an httpOnly cookie is available; access to web storage not guarded for `SecurityError`.
 

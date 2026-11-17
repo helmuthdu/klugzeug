@@ -1,6 +1,6 @@
 ---
 name: review
-description: Strict, source-verified review of code, a pull request, or a design — correctness, API design, TypeScript types, state and data fetching in UI code — with optional security, accessibility (WCAG), or performance lenses. Read-only; approved fixes go to build. Use when asked to review, critique, check code quality, audit for security, check accessibility, assess performance, or assess a PR or design.
+description: Strict, source-verified review of code, a pull request, or a design — correctness, API design, types, state and data fetching in UI code — with optional security, accessibility (WCAG), or performance lenses. Read-only; approved fixes go to build. Use when asked to review, critique, check code quality, audit for security, check accessibility, assess performance, or assess a PR or design.
 argument-hint: '<scope path or diff> [code | pr | greenfield | security | a11y | perf] [focus]'
 ---
 
@@ -19,11 +19,11 @@ If the request names a lens, load only that lens file.
 
 ## Code checklist
 
-- **Correctness**: off-by-one errors, wrong defaults, incorrect narrowing, swallowed errors, unhandled promise rejections, races between async work and unmount or navigation. Also: navigation and link targets that reach the wrong route, and defaults that hide missing data (`?? {}`, `?? 0`, empty `catch`) where the caller needs to know.
-- **Contracts**: naming and parameter order; options objects for three or more parameters; errors surfaced at the boundary that owns them, using the project's error types; hook and API return shapes that follow the project's convention (from the profile).
-- **Types**: unnecessary or unsafe `as`, `!`, and `any`; invariants that the types could express; public types that prevent misuse.
-- **UI state and effects** (component frameworks with render cycles and effects; for signals or web components, apply the profile's equivalents): values derived during render rather than stored; effects that only sync state or duplicate a fetch; stale closures; missing dependencies; event handlers doing work that belongs in a query or reducer. Initial request parameters must agree with the initial UI controls, and reset must return to the same defaults as the first render.
-- **Data fetching**: with a query cache, keys follow the project's key convention rather than ad-hoc inline literals; dependent queries guarded; no duplicate requests; responses not applied after unmount or after a newer request has superseded them.
+- **Correctness**: off-by-one errors, wrong defaults, incorrect narrowing, swallowed errors, unhandled promise rejections, races between async work and disposal or navigation. Also: navigation and link targets that reach the wrong route, and defaults that hide missing data (`?? {}`, `?? 0`, empty `catch`) where the caller needs to know.
+- **Contracts**: naming and parameter order; options objects for three or more parameters; errors surfaced at the boundary that owns them, using the project's error types; public return shapes that follow the project's convention (from the profile).
+- **Types**: unnecessary or unsafe casts and escape hatches the language provides (`as`, `!`, `any` in TypeScript); invariants that the types could express; public types that prevent misuse.
+- **UI state**: derived values computed from their inputs, not stored; side effects that only copy state or repeat a fetch; event handlers doing work that belongs in the data layer. Use the profile's reactivity model. Initial request parameters must agree with the initial UI controls, and reset must return to the same defaults as the first render.
+- **Data fetching**: with a query cache, keys follow the project's key convention rather than ad-hoc inline literals; dependent queries guarded; no duplicate requests; responses not applied after the owner is gone or a newer request has superseded them.
 - **Text**: user-facing strings through the project's translation mechanism, when it has one.
 - **Dependencies and dead code**: unused imports, exports, and packages; module cycles.
 - **Tests**: behaviour-focused, aligned with the public API, not over-mocked (see `test`).

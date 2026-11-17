@@ -1,39 +1,41 @@
 # Frontend testing reference
 
-Names below are Testing Library's. When the profile declares other DOM-testing helpers, map each rule to their equivalent; the principles stay the same.
+Behaviour-first rules for component and DOM tests. The profile names the query, interaction, and network helpers. Use those APIs. This file does not name a library.
 
 ## Query priority
 
-Use the first query that works for the element:
+Prefer lookups that match what a user can perceive:
 
-1. `getByRole` with an accessible name (`{ name: /save/i }`)
-2. `getByLabelText` for form fields
-3. `getByText` for non-interactive content
-4. `getByTestId` only when none of the above can identify the element
+1. Role and accessible name.
+2. The label of a form control.
+3. Visible text.
+4. A test id or selector only when nothing accessible identifies the element. Say why.
 
-If a role query fails, the element is often unlabelled. That is a finding for `review a11y`, not a reason to switch to test IDs.
+A failed role lookup often means the element has no accessible name. That is a finding for `review a11y`, not a reason to default to test ids.
+
+When the UI uses shadow DOM or slots, use the profile's helpers for crossing those boundaries. Stay inside the component's root; do not query the whole document when a scoped root exists.
 
 ## Interaction
 
-- Prefer `userEvent` over `fireEvent`: it fires the full sequence of events a browser fires.
-- For keyboard behaviour, use `userEvent.keyboard('{Enter}')` and `userEvent.tab()`, and assert on `document.activeElement`.
-- For dialogs, assert focus moves in on open and returns to the trigger on close.
+- Drive the behaviour the way a user would: the full activation the assertion depends on, not a single synthetic event that skips it.
+- A helper that only dispatches one event does not prove click, focus, or form behaviour. Use the project's user-level interaction when that is what the test claims.
+- Keyboard: after Tab, Enter, Space, and Escape, assert focus, including `document.activeElement`.
+- Dialogs: focus moves in on open and returns to the trigger on close.
 
 ## Async
 
-- Use `findBy*` (or `waitFor` with an assertion inside) for content that appears later. Do not sleep for a fixed time.
-- For a loading state, assert the loading indicator, then assert its replacement. Assert the error state by making the mock fail, not by forcing component state.
+- Wait on a condition or an assertion. No fixed sleeps.
+- For loading, assert the indicator, then the success or error that follows a real cause (a failed request, a rejected mock). Do not force internal state.
 
 ## Network
 
-- Mock HTTP at the network boundary (MSW or the project's equivalent) so the real query and cache code runs.
-- Reset handlers between tests. Assert on the request when the behaviour depends on it (method, query parameters, body).
-- Cover the empty, error, and populated responses for each query the component uses.
+- Mock at the HTTP boundary the profile declares, so the real client code runs.
+- Reset handlers between tests. Cover the empty, error, and populated responses for each request the UI uses.
 
 ## Anti-patterns
 
-- Asserting on component state, hook return values, or internal function calls.
-- Snapshots of large trees, which hide what changed.
-- Mocking the module that the component is meant to exercise.
-- Testing styles or class names instead of behaviour.
-- Several unrelated expectations in one `it`.
+- Asserting on private state or framework internals, or on internal function calls.
+- Large snapshots that hide what changed.
+- Mocking the module under test.
+- Asserting styles or class names instead of behaviour.
+- Several unrelated expectations in one test.
