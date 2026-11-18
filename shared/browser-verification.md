@@ -12,5 +12,6 @@ Use this procedure when a change alters rendered UI, client-side behaviour, or a
    - keyboard: Tab reaches each control in a sensible order, focus is visible, Enter and Space activate, Escape closes dialogs;
    - screenshot each state you claim to have checked, and describe what you saw.
 5. **Interact through the UI** (clicks, typing, keyboard), not by calling internal functions.
-6. **Clean up**: stop the dev server you started. Never run this procedure against a production URL without approval.
-7. **Report**: states covered, console and network results, widths tested, and `[VERIFY]` gaps.
+6. **Performance** (when the change can affect loading, rendering, interaction cost, or memory): measure a production build served locally, not the dev server, using the **Build** output. Use the same throttling and page for every run, take at least three runs, and report the median. Record the metrics the `perf` lens names: LCP and CLS from the browser tooling or **Performance measurement command**, and the response time of each interaction you exercised. Retained memory is the heap after repeating the action several times, with the first run discarded. If the tooling cannot record a metric, or the numbers come from the dev server, mark them `[VERIFY]`.
+7. **Clean up**: stop the dev server you started. Never run this procedure against a production URL without approval.
+8. **Report**: states covered, console and network results, widths tested, performance numbers with their tool, page, throttling, and run count (when measured), and `[VERIFY]` gaps.
