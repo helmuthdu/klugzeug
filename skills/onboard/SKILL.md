@@ -17,6 +17,7 @@ Read `~/.agents/klugzeug/contract.md`. Onboarding reads the repository and write
 5. **Boundaries**: CI workflow directories, generated folders, committed build output, and any "do not edit" notes.
 6. **Plan file**: where `.plan.md` would live, whether `.gitignore` covers it, and whether plans are committed.
 7. **Every profile key** in `~/.agents/klugzeug/contract.md` → **Profile keys**: detect a value for each one, or record `none` when the project has no such thing. Link a file only when it exists. Never leave a key blank. The a11y lens defaults to WCAG 2.2 Level A and AA when the accessibility target is unset.
+8. **Instruction routing**: when assessing discoverability, trace a root-level task and, if present, a nested task through every ancestor `AGENTS.md` to the repository root, including hidden directories such as `.github`. Indexes and `> Read when:` lines aid discovery; they never exempt an applicable ancestor. Record concrete missed or stale guidance from those traces, not hypothetical layout improvements.
 
 ## 2. Draft
 
@@ -37,4 +38,4 @@ When the profile exists: re-detect each field, and show only the fields that cha
 - Profile: created, refreshed, or unchanged.
 - Fields marked `[VERIFY]`, with the reason for each.
 - Keys set to `none`, and lookups that found nothing (for example, no e2e script), so the user knows what klugzeug will not check.
-- Optional navigation improvements, offered but never written here: a root "Find it fast" lookup table, a `> Read when:` trigger line per subtree `AGENTS.md`, and a subtree index, when the repo has several instruction files and discovery is slow. Repository-owned validators may enforce them; klugzeug does not.
+- Optional navigation improvements, offered but never written here: only when instruction-routing traces find friction, name the representative task, affected path, missed guidance, and smallest navigation fix. Do not restructure instructions or assume client loading behavior; mark the latter `[VERIFY]` when unknown.
