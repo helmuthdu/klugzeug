@@ -6,7 +6,7 @@ argument-hint: '<scope path> [improve | feature <name> | bug <id or symptom> | n
 
 # plan
 
-Read `~/.agents/klugzeug/contract.md` and the project profile. Planning is read-only except for writing `<scope>/.plan.md`. It implements nothing. The scope defaults to the repository root; a focus (file, module, or topic) narrows what is analysed. For a large scope, analyse one module at a time.
+Read `references/contract.md` next to this SKILL.md and the project profile. Planning is read-only except for writing `<scope>/.plan.md`. It implements nothing. The scope defaults to the repository root; a focus (file, module, or topic) narrows what is analysed. For a large scope, analyse one module at a time.
 
 ## Existing plan
 
@@ -27,7 +27,7 @@ Write the Assessment as findings in the contract's finding format, grouped by ar
 
 When an item touches accessibility, performance, security, UX, or UI, load only that lens from the installed `review` skill (`~/.agents/skills/review/references/`, or the client's equivalent): `security`, `a11y`, `perf`, `ux`, or `ui`. Use its criterion. Do not copy the lens into the plan. UX and UI items use the `D` id.
 
-For an item that touches rendered UI, Done when names the states the change can show and one check a test or `~/.agents/klugzeug/browser-verification.md` can observe.
+For an item that touches rendered UI, Done when names the states the change can show and one check a test or `references/browser-verification.md` next to this SKILL.md can observe.
 
 ## Rules
 

@@ -6,7 +6,7 @@ argument-hint: '[repo path]'
 
 # onboard
 
-Read `~/.agents/klugzeug/contract.md`. Onboarding reads the repository and writes exactly one section: `## Project profile` in `AGENTS.md`. It runs no installs, builds, or tests.
+Read `references/contract.md` next to this SKILL.md. Onboarding reads the repository and writes exactly one section: `## Project profile` in `AGENTS.md`. It runs no installs, builds, or tests.
 
 ## 1. Detect (read-only)
 
@@ -16,7 +16,7 @@ Read `~/.agents/klugzeug/contract.md`. Onboarding reads the repository and write
 4. **Conventions**: `AGENTS.md`, `CONTRIBUTING*`, `.agents/`, and the PR template: search case-insensitively for `pull_request_template.md` / `PULL_REQUEST_TEMPLATE.md` and a `.github/PULL_REQUEST_TEMPLATE/` directory, in the profile's repository and — when the profile lives in a nested package — at the git top level (`git rev-parse --show-toplevel`). **Commit convention**: prefer a documented policy or an enforced hook; recent commit subjects are evidence of style, not proof of a rule, so record an inferred convention with its source. Also detect `CHANGELOG*`, change-file tooling, and protected branch names.
 5. **Boundaries**: CI workflow directories, generated folders, committed build output, and any "do not edit" notes.
 6. **Plan file**: where `.plan.md` would live, whether `.gitignore` covers it, and whether plans are committed.
-7. **Every profile key** in `~/.agents/klugzeug/contract.md` → **Profile keys**: detect a value for each one, or record `none` when the project has no such thing. Link a file only when it exists. Never leave a key blank. The a11y lens defaults to WCAG 2.2 Level A and AA when the accessibility target is unset.
+7. **Every profile key** in `references/contract.md` next to this SKILL.md → **Profile keys**: detect a value for each one, or record `none` when the project has no such thing. Link a file only when it exists. Never leave a key blank. The a11y lens defaults to WCAG 2.2 Level A and AA when the accessibility target is unset.
 8. **Instruction routing**: when assessing discoverability, trace a root-level task and, if present, a nested task through every ancestor `AGENTS.md` to the repository root, including hidden directories such as `.github`. Indexes and `> Read when:` lines aid discovery; they never exempt an applicable ancestor. Record concrete missed or stale guidance from those traces, not hypothetical layout improvements.
 
 ## 2. Draft

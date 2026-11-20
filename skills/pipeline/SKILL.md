@@ -6,7 +6,7 @@ argument-hint: '<scope path> [improve | feature <name> | bug <id> | new-module <
 
 # pipeline
 
-Read `~/.agents/klugzeug/contract.md` and the profile. Establish the mode first:
+Read `references/contract.md` next to this SKILL.md and the profile. Establish the mode first:
 
 - **Assess** (default when the request names no change): `plan`, `review`, and `test` run read-only; `docs` audits only. No code changes, no `build`, no `deliver`. `plan` may write `.plan.md`.
 - **Change** (the request names work to implement or fix): all stages run, subject to the approval gate.

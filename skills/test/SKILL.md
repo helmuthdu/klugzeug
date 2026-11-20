@@ -6,7 +6,7 @@ argument-hint: '<scope path> [focus] [audit-only]'
 
 # test
 
-Read `~/.agents/klugzeug/contract.md` and the profile's **Test (all)**, **Test (one file)**, and **Test layers** keys. Assess by default: report gaps. Change tests only when the request asks for it (add, write, fix, clean up, improve). A focus narrows the area; a large scope is audited one module at a time.
+Read `references/contract.md` next to this SKILL.md and the profile's **Test (all)**, **Test (one file)**, and **Test layers** keys. Assess by default: report gaps. Change tests only when the request asks for it (add, write, fix, clean up, improve). A focus narrows the area; a large scope is audited one module at a time.
 
 ## 1. Baseline
 

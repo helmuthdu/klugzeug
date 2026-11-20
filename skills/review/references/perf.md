@@ -22,7 +22,7 @@ The same thresholds apply on mobile and desktop. Good is LCP within 2.5 seconds,
 
 A lab run does not decide pass or fail. Lighthouse, when **Performance measurement command** names it, measures LCP and CLS. A lab load has no user input, so it reports Total Blocking Time where INP would be; treat that as a lab stand-in. Name the tool, the page, the throttling profile, and the run count with every number. When the profile has no field data, mark the field outcome `[VERIFY]`.
 
-Use the browser tooling (`~/.agents/klugzeug/browser-verification.md`) when the page renders locally.
+Use the browser tooling (`references/browser-verification.md` next to this SKILL.md) when the page renders locally.
 
 ## Severity
 

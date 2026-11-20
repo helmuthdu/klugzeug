@@ -6,7 +6,7 @@ argument-hint: '<scope path> [quadrant | page | jsdoc | audit] [focus]'
 
 # docs
 
-Read `~/.agents/klugzeug/contract.md` and the profile. Source decides what the docs may claim; Diátaxis decides where each claim lives. Audit requests are read-only.
+Read `references/contract.md` next to this SKILL.md and the profile. Source decides what the docs may claim; Diátaxis decides where each claim lives. Audit requests are read-only.
 
 ## Classify before writing
 

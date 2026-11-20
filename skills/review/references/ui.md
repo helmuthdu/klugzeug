@@ -14,7 +14,7 @@ Before judging, name the product's purpose, audience, and design language, taken
 
 ## Evidence
 
-- Prefer a rendered observation (`~/.agents/klugzeug/browser-verification.md`): each claimed state at 375px and 1280px, and in each theme the project ships, with the screenshot described. Most visual problems cannot be seen from source.
+- Prefer a rendered observation (`references/browser-verification.md` next to this SKILL.md): each claimed state at 375px and 1280px, and in each theme the project ships, with the screenshot described. Most visual problems cannot be seen from source.
 - Source alone is enough for a value that bypasses a token or a component the system provides. Cite the line and the token or component that should have been used.
 - A judgment about how a screen reads (too dense, unclear emphasis) without a rendered observation is `[VERIFY]`.
 
