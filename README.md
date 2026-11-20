@@ -1,6 +1,6 @@
 # klugzeug
 
-A stack-agnostic set of eight agent skills for frontend engineering: plan, build, test, review, docs, deliver, pipeline, and onboard. Project specifics live in each repository's `AGENTS.md`, in a `## Project profile` section, not in the skills.
+A stack-agnostic set of eight agent skills for frontend and backend engineering: plan, build, test, review, docs, deliver, pipeline, and onboard. Project specifics live in each repository's `AGENTS.md`, in a `## Project profile` section, not in the skills.
 
 ## Skills
 
@@ -10,7 +10,7 @@ A stack-agnostic set of eight agent skills for frontend engineering: plan, build
 | `plan`     | Audits, feature specs, bug triage, and new-module designs in `<scope>/.plan.md`              |
 | `build`    | Implementing, fixing (test first), refactoring, migrating, and upgrading dependencies        |
 | `test`     | Coverage gaps, behaviour-focused tests, flaky-test removal                                   |
-| `review`   | Code, PR, and greenfield reviews; `security`, `a11y`, `perf`, `ux`, and `ui` lenses           |
+| `review`   | Code, PR, and greenfield reviews; `reliability`, `security`, `a11y`, `perf`, `ux`, and `ui` lenses |
 | `docs`     | Diátaxis guides, JSDoc, README, verified against source                                      |
 | `deliver`  | Commits, branches, PR bodies, change files; only the named action                            |
 | `pipeline` | One run per independent task: ordered stages, approval gates, and one validation            |
@@ -59,7 +59,7 @@ Resolution order: the user's request, then the profile (walk up until an `AGENTS
 
 - One canonical shared contract, with checked copies for installation.
 - Each `SKILL.md` is under 110 lines. Checklists and templates live in `references/` and load only when used.
-- Descriptions name the trigger words, and skills do not overlap. Security, accessibility, performance, UX, and UI are lenses of `review`, not separate skills.
+- Descriptions name the trigger words, and skills do not overlap. Reliability, security, accessibility, performance, UX, and UI are lenses of `review`, not separate skills.
 - Skills never widen the scope the request sets.
 - The contract's smallest-change rule applies to every skill.
 

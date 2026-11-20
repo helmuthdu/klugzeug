@@ -32,7 +32,7 @@ Read `references/contract.md` next to this SKILL.md and the project profile (com
 - **Bug fix**: step 3 is mandatory. A fix without a test that failed before and passes after is `[VERIFY]`.
 - **Dependency upgrade**: follow `references/dependency-upgrade.md`.
 - **Removal, rename, migration, or deprecation**: follow `references/completeness-inventory.md` before editing, and reconcile it after validation.
-- **Visible UI change**: after the gates, run `references/browser-verification.md` next to this SKILL.md.
+- **Visible UI change**: after the gates, run `references/browser-verification.md` next to this SKILL.md. A change with no rendered UI skips that procedure.
 
 ## Rules
 

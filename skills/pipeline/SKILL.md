@@ -22,7 +22,7 @@ Each stage follows its own skill (`~/.agents/skills/<stage>/SKILL.md`, or the cl
 1. **plan**: write or validate `<scope>/.plan.md`. Present the plan and wait.
 2. **build**: an approval gate. Runs only after the user approves the plan items, or a named subset. Skipped in assess mode.
 3. **test**: gap analysis, starting from the files `build` changed. Writes only the tests still missing inside the approved scope.
-4. **review**: the `code` lens, plus `security`, `a11y`, `perf`, `ux`, or `ui` when the scope touches those areas. Present the findings. Fixing them needs approval and a second `build` pass; re-review only the fixed findings. A finding is `— FIXED` only after that pass; otherwise it stays open.
+4. **review**: the `code` lens, plus `reliability`, `security`, `a11y`, `perf`, `ux`, or `ui` when the scope touches those areas. Present the findings. Fixing them needs approval and a second `build` pass; re-review only the fixed findings. A finding is `— FIXED` only after that pass; otherwise it stays open.
 5. **docs**: updates only the pages that the approved change touches, adding what `build` left out.
 6. **deliver**: runs only when that task names a delivery action (`commit`, `branch`, PR body, change file, or release notes). Otherwise stop after `docs` and report.
 

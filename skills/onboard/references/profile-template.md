@@ -5,7 +5,7 @@ Copy this structure into `AGENTS.md`. Every key in the tables is required: write
 ```md
 ## Project profile
 
-- **Stack**: <language, framework, UI library, state/data library, test runners, bundler>
+- **Stack**: <language, frontend framework and UI library or none, state/data library, backend framework or none, database and migration tooling or none, test runners, bundler>
 - **Workflow skills**: plan, build, test, review, docs, deliver, pipeline, onboard (klugzeug, installed globally)
 
 ### Commands
