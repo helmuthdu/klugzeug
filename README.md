@@ -13,7 +13,7 @@ A stack-agnostic set of eight agent skills for frontend engineering: plan, build
 | `review`   | Code, PR, and greenfield reviews; `security`, `a11y`, `perf`, `ux`, and `ui` lenses           |
 | `docs`     | Diátaxis guides, JSDoc, README, verified against source                                      |
 | `deliver`  | Commits, branches, PR bodies, change files; only the named action                            |
-| `pipeline` | Ordered stages with approval gates, subagents, and one final validation run                  |
+| `pipeline` | One run per independent task: ordered stages, approval gates, and one validation            |
 
 Ownership: `review` finds problems and never edits; `build` edits; `deliver` only ships. `plan` writes only `.plan.md`.
 
