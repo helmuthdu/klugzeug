@@ -53,7 +53,7 @@ Rerun the failing file alone to classify it. A test that passes alone and fails 
 
 ## Validation
 
-Iterate with single-file runs. After standalone test changes, run **Test (all)** once. Report results against the Before, Added, Removed, and Rewritten counts below.
+Iterate with single-file runs. After standalone test changes, run **Test (all)** once. When TypeScript test files change, also run a typecheck that includes them; use the separate test-typecheck command when the implementation Typecheck excludes tests. If no check covers them, report that gap as `[VERIFY]`. Do not assume the test runner type-checks. Report results against the Before, Added, Removed, and Rewritten counts below.
 
 ## Report
 

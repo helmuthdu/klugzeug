@@ -4,6 +4,8 @@ Every klugzeug skill follows these rules. The skill says what to do; this file s
 
 ## Project profile
 
+Before relying on repository instructions, re-read the governing `AGENTS.md` files from disk; copies in conversation context may be stale.
+
 Project facts (commands, stack, validation gates, conventions) come from the `## Project profile` section of an `AGENTS.md`, resolved in this order:
 
 1. The user's instruction in the current request.
@@ -29,7 +31,7 @@ Canonical names. `onboard` writes each one into the profile; `check-skills` fail
 - **Test (one file)**: command for a single test file.
 - **Lint**: lint command.
 - **Lint fix**: command that applies fixes.
-- **Typecheck**: command that type-checks without emitting.
+- **Typecheck**: command(s) that type-check without emitting. Include changed test files; when a separate config or script is needed, list it alongside the implementation check.
 - **Build**: build command.
 - **E2E**: browser end-to-end command.
 - **Docs**: docs validators and docs build.
