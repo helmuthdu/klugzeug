@@ -1,6 +1,6 @@
 ---
 name: test
-description: Audit, add, restructure, or clean up a project's automated tests — coverage gaps per public contract, behaviour-focused unit and component tests, network-level mocking, e2e and visual layers, and removal of flaky or brittle tests. Use when asked to write, add, improve, fix, or clean up tests, or to check test coverage.
+description: Audit, add, restructure, or clean up a project's automated tests — coverage gaps per public contract, behaviour-focused unit, component, and API tests, network-level mocking, e2e and visual layers, and removal of flaky or brittle tests. Use when asked to write, add, improve, fix, or clean up tests, or to check test coverage.
 argument-hint: '<scope path> [focus] [audit-only]'
 ---
 
@@ -19,7 +19,8 @@ For each public export or user-visible behaviour in scope, check:
 - the success path and documented options;
 - invalid input and boundary values, when the API accepts them;
 - async failure, cancellation, and cleanup, only when the API has those states;
-- for interactive UI: keyboard operation, not only clicks, and each state the component renders (loading, empty, error, partial, success, disabled).
+- for interactive UI: keyboard operation, not only clicks, and each state the component renders (loading, empty, error, partial, success, disabled);
+- for a handler, query, job, or write: the caller's allowed and refused cases, and the persisted result when the operation stores one.
 
 Do not invent timeouts, cancellation, or edge cases the code does not have.
 
@@ -28,7 +29,7 @@ Also flag existing tests that are obsolete, duplicated, brittle (asserting struc
 ## 3. Write tests (when authorised)
 
 - One `describe` per unit. Each `it` names one observable behaviour: "shows a retry button after a failed save", never "works".
-- Query by role, label, and text with the **Query helper** key. Use test ids or selectors only when nothing accessible exists, and say why.
+- Query by role, label, and text with the **Query helper** key. Use test ids or selectors only when nothing accessible exists, and say why. Skip the query, interaction, and browser-API rules when **Query helper** is `none`.
 - Interact the way a user does, with the **Interaction helper** key. Assert on what is visible, not on private state.
 - Mock at the network boundary that **Network helper** names. Mock modules only for true externals: clock, storage, browser APIs.
 - Make time, randomness, and scheduling deterministic with fake timers or injected clocks. No fixed sleeps.
@@ -44,7 +45,7 @@ Use the layers in **Test layers**. Put each test in the lowest layer that can ob
 - **unit**: pure functions and modules;
 - **component**: rendering and interaction (query order and async patterns in `references/frontend-testing.md`);
 - **integration**: several modules, including the network layer;
-- **e2e**: real browser, critical flows only;
+- **e2e**: critical flows only, run with the **E2E** command. The browser procedure applies only when that flow renders UI;
 - **visual**: only when **Visual baseline** is set.
 
 ## 5. Flakiness

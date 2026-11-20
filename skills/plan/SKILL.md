@@ -1,6 +1,6 @@
 ---
 name: plan
-description: Analyse a codebase, package, or module and write an actionable plan to <scope>/.plan.md — an improvement audit, feature spec, bug triage, or new-module design — including UI states and accessibility and performance criteria for frontend work. Use when asked to plan, audit, spec, design, scope, or triage changes before implementing them.
+description: Analyse a codebase, package, or module and write an actionable plan to <scope>/.plan.md — an improvement audit, feature spec, bug triage, or new-module design — including UI criteria for rendered changes and request, persistence, and failure criteria for handler, query, job, or persisted-record work. Use when asked to plan, audit, spec, design, scope, or triage changes before implementing them.
 argument-hint: '<scope path> [improve | feature <name> | bug <id or symptom> | new-module <name>] [focus]'
 ---
 
@@ -21,13 +21,15 @@ If `<scope>/.plan.md` exists, check each item against the current source before 
 
 ## Assessment
 
-Write the Assessment as findings in the contract's finding format, grouped by area (for example, routing, data, UI, tests). Each finding cites `file:line`. A narrative summary may open the section, but it does not replace the findings.
+Write the Assessment as findings in the contract's finding format, grouped by area (for example, routing, data, UI, API, tests). Each finding cites `file:line`. A narrative summary may open the section, but it does not replace the findings.
 
 ## Items that touch a lens
 
-When an item touches accessibility, performance, security, UX, or UI, load only that lens from the installed `review` skill (`~/.agents/skills/review/references/`, or the client's equivalent): `security`, `a11y`, `perf`, `ux`, or `ui`. Use its criterion. Do not copy the lens into the plan. UX and UI items use the `D` id.
+When an item touches accessibility, performance, security, UX, or UI, load only that lens from the installed `review` skill (`~/.agents/skills/review/references/`, or the client's equivalent): `security`, `a11y`, `perf`, `ux`, or `ui`. When it touches persistence, transactions, concurrency, retries, or jobs, load `reliability` the same way. Use its criterion. Do not copy the lens into the plan. UX and UI items use the `D` id.
 
 For an item that touches rendered UI, Done when names the states the change can show and one check a test or `references/browser-verification.md` next to this SKILL.md can observe.
+
+For any item that touches a handler, query, job, or persisted record, Done when names the success and failure a caller can observe and the test that shows them, whether or not the item also renders UI. For mixed UI/backend items, include both these criteria and the rendered-UI criteria. Do not load `ux`, `ui`, or `a11y` for backend behavior without a rendered-UI concern.
 
 ## Rules
 
