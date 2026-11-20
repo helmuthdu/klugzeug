@@ -12,7 +12,7 @@ Project facts (commands, stack, validation gates, conventions) come from the `##
 4. Detection: `package.json` scripts, lockfile (`bun.lock`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`), tool configs (vitest, jest, playwright, biome, eslint, `tsconfig*.json`).
 5. Ask the user, as a `[BLOCKED]` decision.
 
-**Subtree rules.** Every `AGENTS.md` on the walk from the target to the profile file is a rule set for its own subtree. Its rules bind edits inside that subtree, in addition to the profile. A nearer rule wins for its subtree. A rule that conflicts with the profile is a `[BLOCKED]` decision.
+**Subtree rules.** Profile selection and rule collection are separate walks. The profile is the first `AGENTS.md` (walking up) that contains a `## Project profile` section. The rules are every `AGENTS.md` from the target up to the repository root, including files above the profile and any nested profile between them; a nearer file wins for its subtree, and a rule that conflicts with the profile is a `[BLOCKED]` decision. A symlinked `AGENTS.md` counts as an instruction file at its own location.
 
 **Profile keys.** A skill refers to a project fact by the key name in the list below. Every key is either a value or `none`. A key set to `none` is skipped and listed in the report, never inferred. A key that is absent is `[VERIFY]`.
 

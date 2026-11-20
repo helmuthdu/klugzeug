@@ -25,7 +25,7 @@ Read `~/.agents/klugzeug/contract.md` and the profile. This skill owns delivery 
 
 ## Pull request body
 
-1. If the repo has a PR template (**PR template** names its path, or `.github/pull_request_template.md`), start from it. Keep every heading, comment, and checklist item. Fill placeholders with accurate content, and leave unchecked any item you did not verify.
+1. If the repo has a PR template, start from it: **PR template** names its path; otherwise search case-insensitively for `pull_request_template.md` / `PULL_REQUEST_TEMPLATE.md` and a `.github/PULL_REQUEST_TEMPLATE/` directory, in the repository and (for a nested package) at the git top level. Keep every heading, comment, and checklist item. Fill placeholders with accurate content, and leave unchecked any item you did not verify.
 2. Without a template: summary, what changed, how it was validated (commands and results), risks, and breaking changes with migration steps.
 3. Write the body to a file or to chat. Open the pull request only when asked, and push the current branch first.
 
