@@ -47,6 +47,7 @@ Resolution order: the user's request, then the profile (walk up until an `AGENTS
 - Each `SKILL.md` is under 110 lines. Checklists and templates live in `references/` and load only when used.
 - Descriptions name the trigger words, and skills do not overlap. Security, accessibility, performance, UX, and UI are lenses of `review`, not separate skills.
 - Skills never widen the scope the request sets.
+- The contract's smallest-change rule applies to every skill.
 
 ## Check
 

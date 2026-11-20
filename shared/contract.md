@@ -70,6 +70,19 @@ Canonical names. `onboard` writes each one into the profile; `check-skills` fail
 - Never widen the scope. Related occurrences are fixed only when they are inside the scope and verifiable; otherwise they are reported as `[DEFERRED]`.
 - Do not edit generated files, or lockfiles by hand. Lockfiles change only through the package manager during an approved change.
 
+## Smallest change
+
+For each part you are about to add, take the first option that fully solves it:
+
+1. It does not need to exist. Record it as `[DEFERRED]`. The outcome the user named is never this step.
+2. The codebase already has it. Use it the way the surrounding code does.
+3. The standard library or platform has it.
+4. An installed dependency has it. Adding a dependency stays an approval gate.
+5. It can be one line a reader gets at a glance.
+6. Otherwise write the minimum that works.
+
+Write scope decides what may be edited. Finish the callers, tests, fixtures, and exports inside that scope. Extras nobody asked for are `[DEFERRED]`. Add no abstraction, option, config, or dependency nobody asked for. When two versions of the same size differ on edge cases, take the correct one. A stop happens only at the existing gate: choosing between materially different designs is `[BLOCKED]`. Never cut validation at trust boundaries, error handling that prevents data loss, security, accessibility, or anything the user asked for.
+
 ## Approval gates
 
 Stop and emit `[BLOCKED] <decision>` before:
