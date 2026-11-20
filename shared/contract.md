@@ -123,7 +123,7 @@ Security findings prefix the class: `[VULN High]` for a confirmed exploitable is
 
 ## Evidence
 
-- Source code and tests are the truth. Docs, comments, and old plans are claims to check.
+- Source code and tests are the truth. Docs, comments, old plans, and past conversations are claims to check.
 - Verify every finding against code you have read. Name the file and line range.
 - A stale `.plan.md` is not authorisation. Check its items against the current source before using them.
 - Subagents gather bounded evidence. Their reports are evidence, not decisions; verify implementation-sensitive claims before acting on them.
