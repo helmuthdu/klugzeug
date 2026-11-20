@@ -4,6 +4,7 @@
 //   - SKILL.md stays within the line budget (progressive disclosure)
 //   - every `references/...` or `~/.agents/klugzeug/...` path named in SKILL.md, its references/, or shared/ exists
 //   - every key in shared/contract.md "## Profile keys" has a row in the onboard profile template
+//   - every profile key is read by at least one rule outside the key list and onboard
 // Exits 1 on any failure so install.sh can refuse to link a broken set.
 
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
@@ -96,6 +97,8 @@ function profileKeys(contract) {
   return keys;
 }
 
+const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 function checkProfileKeys() {
   const keys = profileKeys(readFileSync(join(SHARED, 'contract.md'), 'utf8'));
   if (!keys) return fail('shared/contract.md has no "## Profile keys" section');
@@ -103,14 +106,47 @@ function checkProfileKeys() {
   if (!existsSync(PROFILE_TEMPLATE)) return fail('skills/onboard/references/profile-template.md is missing');
   const template = readFileSync(PROFILE_TEMPLATE, 'utf8');
   for (const key of keys) {
-    const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    if (!new RegExp(`^\\|\\s*${escaped}\\s*\\|`, 'm').test(template)) {
+    if (!new RegExp(`^\\|\\s*${escapeRegExp(key)}\\s*\\|`, 'm').test(template)) {
       fail(`profile-template.md has no row for profile key "${key}"`);
     }
   }
+  return keys;
 }
 
-checkProfileKeys();
+// A key that only the contract defines and onboard writes changes no behaviour. Each key must be
+// read as `**Key**` by a rule: the contract outside its key list, a skill other than onboard, a
+// skill reference, or a shared procedure.
+function withoutSection(text, heading) {
+  const lines = text.split('\n');
+  const start = lines.indexOf(heading);
+  if (start === -1) return text;
+  const next = lines.findIndex((line, index) => index > start && line.startsWith('## '));
+  return [...lines.slice(0, start), ...(next === -1 ? [] : lines.slice(next))].join('\n');
+}
+
+function checkKeyUsage(keys) {
+  const sources = [withoutSection(readFileSync(join(SHARED, 'contract.md'), 'utf8'), '## Profile keys')];
+  for (const file of SHARED_FILES) {
+    if (file !== 'contract.md') sources.push(readFileSync(join(SHARED, file), 'utf8'));
+  }
+  for (const entry of readdirSync(SKILLS, { withFileTypes: true })) {
+    if (!entry.isDirectory() || entry.name === 'onboard') continue;
+    const dir = join(SKILLS, entry.name);
+    if (existsSync(join(dir, 'SKILL.md'))) sources.push(readFileSync(join(dir, 'SKILL.md'), 'utf8'));
+    const referencesDir = join(dir, 'references');
+    if (!existsSync(referencesDir)) continue;
+    for (const ref of readdirSync(referencesDir)) {
+      if (ref.endsWith('.md')) sources.push(readFileSync(join(referencesDir, ref), 'utf8'));
+    }
+  }
+  const text = sources.join('\n');
+  for (const key of keys) {
+    if (!text.includes(`**${key}**`)) fail(`profile key "${key}" is not read by any rule outside onboard`);
+  }
+}
+
+const keys = checkProfileKeys();
+if (keys) checkKeyUsage(keys);
 
 const entries = readdirSync(SKILLS, { withFileTypes: true });
 const skillNames = entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name);

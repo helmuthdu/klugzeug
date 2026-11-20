@@ -13,7 +13,7 @@ Read `~/.agents/klugzeug/contract.md` and the profile. Establish the mode first:
 
 ## Tasks
 
-A request with one outcome is one task: the stages below run once. When the request names more than one outcome, load `references/tasks.md` and classify before any stage. Run the resulting tasks one at a time. Each task has its own scope, mode, plan file, approval gate, and aggregate validation. A `[BLOCKED]` or missing evidence stops that task only; continue with the next independent task.
+A request with one outcome is one task: the stages below run once. When the request names more than one outcome, load `references/tasks.md` and classify before any stage. Plan the independent tasks together for one approval, then build the approved tasks one at a time. Each task has its own scope, mode, plan file, and aggregate validation. A `[BLOCKED]` or missing evidence stops that task only; continue with the next independent task.
 
 ## Stages
 
@@ -21,10 +21,12 @@ Each stage follows its own skill (`~/.agents/skills/<stage>/SKILL.md`, or the cl
 
 1. **plan**: write or validate `<scope>/.plan.md`. Present the plan and wait.
 2. **build**: an approval gate. Runs only after the user approves the plan items, or a named subset. Skipped in assess mode.
-3. **test**: gap analysis. Writes tests only inside the approved scope.
+3. **test**: gap analysis, starting from the files `build` changed. Writes only the tests still missing inside the approved scope.
 4. **review**: the `code` lens, plus `security`, `a11y`, `perf`, `ux`, or `ui` when the scope touches those areas. Present the findings. Fixing them needs approval and a second `build` pass; re-review only the fixed findings. A finding is `— FIXED` only after that pass; otherwise it stays open.
-5. **docs**: updates only the pages that the approved change touches.
+5. **docs**: updates only the pages that the approved change touches, adding what `build` left out.
 6. **deliver**: runs only when that task names a delivery action (`commit`, `branch`, PR body, change file, or release notes). Otherwise stop after `docs` and report.
+
+`test` and `docs` do not rewrite what `build` wrote. Changing it takes a finding and a second `build` pass, as for review findings.
 
 Record a stage named after `skip:` as skipped. A skipped `build` gives no later stage authority to change code.
 
@@ -34,7 +36,7 @@ Run a stage as a subagent only when it is bounded and its evidence is independen
 
 ## Handoff
 
-Pass between stages only: the plan file with its status markers, the approved scope, source references, unresolved findings, baseline failures, and executed checks with their results and inputs. Reuse a passing check only while its inputs are unchanged. Keep the handoff short; do not copy whole files between stages.
+Pass between stages only: the plan file with its status markers, the approved scope, the files `build` changed, source references, the review verdict and its open findings, baseline failures, and executed checks with their results and inputs. Reuse a passing check only while its inputs are unchanged. Keep the handoff short; do not copy whole files between stages.
 
 ## Validation
 

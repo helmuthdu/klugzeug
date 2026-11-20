@@ -75,11 +75,14 @@ Canonical names. `onboard` writes each one into the profile; `check-skills` fail
 Stop and emit `[BLOCKED] <decision>` before:
 
 - a breaking change to a public export, or removing or renaming one;
+- changing a path that **Protected paths** lists, unless the request names that path;
 - adding a runtime dependency (replacing one counts as adding);
 - deleting files or data beyond the named scope, or any irreversible operation;
 - commit, push, tag, publish, release, or opening a pull request, unless the request names that action (approval does not carry over to the next action);
 - proceeding over a red baseline, unless the task is to fix that baseline;
 - choosing between materially different designs.
+
+A public export is anything reachable from the files that **Public API entry points** names. When that key is `none` or absent, whether a change is breaking is `[VERIFY]`; do not decide it by guessing.
 
 Never use `--no-verify`, skip hooks, or bypass a check to get past a gate.
 
