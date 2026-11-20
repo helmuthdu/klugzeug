@@ -38,7 +38,7 @@ Read `~/.agents/klugzeug/contract.md` and the project profile (commands, validat
 
 - When a test fails, fix the code, not the test, unless the requested behaviour changes. Say explicitly when it does.
 - For an approved breaking change, remove the old path entirely: no shims, dead code, or transitional wrappers. Keep the old path only when the plan item is a deprecation that says to keep it. Report the migration.
-- Prefer the simplest design that meets the criteria. No speculative options or extension points.
+- Follow **Smallest change** in the contract.
 - Never weaken, skip, or delete a test to get green. Delete a test only when it asserts behaviour that was intentionally removed, and say which.
 - Do not commit, push, or publish here. Use `deliver`.
 
