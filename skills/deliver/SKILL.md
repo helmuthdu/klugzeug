@@ -14,6 +14,7 @@ Read `~/.agents/klugzeug/contract.md` and the profile. This skill owns delivery 
 - Read `git status` and the complete diff for the scope. Preserve changes you did not make: stage only this change's paths (`git add -- <paths>`), and commit only those paths (`git commit -- <paths>`).
 - Never use `--no-verify` or skip hooks. If a hook fails, report its output and fix the cause, or emit `[BLOCKED]`.
 - Push the current branch, never with `--force`, only when the request names a push or opening a pull request. Never rewrite history, force-push, delete branches, tag, or publish.
+- When a review verdict exists for the scope and it is `Needs work` or `Block`, a push or pull request is `[BLOCKED]` until the user accepts the open findings by name. Commits, branches, and change files go ahead; list the open findings in the report. Put accepted findings in the pull request body under risks.
 
 ## Commit
 
@@ -42,4 +43,4 @@ Build them from the change entries and commits in scope. Do not publish. Run **P
 - **Action performed**: commit hashes, branch name, PR body path, change files created.
 - **Validation used**: the gate results the delivery relies on.
 - **Not done**: pushes, pull request creation, publishing, unless named.
-- **Open**: `[BLOCKED]` items.
+- **Open**: `[BLOCKED]` items, and open review findings the delivery went ahead with.
