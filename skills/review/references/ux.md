@@ -7,7 +7,7 @@ Prioritise by effect on the user's task. Do not report visual nitpicks (spacing,
 ## Evidence
 
 - Name the user, the task, and the screen state for each finding. "The settings page is confusing" is not a finding; "a first-time user cannot tell which of two Save buttons applies" is.
-- Prefer a rendered observation (`~/.agents/klugzeug/browser-verification.md`): the state at 375px and 1280px widths, with a screenshot described. Otherwise cite the source that produces the state.
+- Prefer a rendered observation (`references/browser-verification.md` next to this SKILL.md): the state at 375px and 1280px widths, with a screenshot described. Otherwise cite the source that produces the state.
 - A claim about how real users behave (what they expect, what confuses them) cannot be proven from source. Mark it `[VERIFY]` and say what test or observation would settle it.
 - Consistency means consistency with the project: its design tokens, component library, and copy conventions, as **Design system** and **Translation mechanism** name them. Without those, compare only the screens inside the reviewed scope, and do not impose outside conventions.
 

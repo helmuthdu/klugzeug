@@ -2,12 +2,13 @@
 // Validates every klugzeug skill and the shared files it depends on.
 //   - SKILL.md exists; frontmatter has name (== directory) and description
 //   - SKILL.md stays within the line budget (progressive disclosure)
-//   - every `references/...` or `~/.agents/klugzeug/...` path named in SKILL.md, its references/, or shared/ exists
+//   - every `references/...` path named in SKILL.md, its references/, or shared/ exists
+//   - shared references are regular, up-to-date copies so each skill installs independently
 //   - every key in shared/contract.md "## Profile keys" has a row in the onboard profile template
 //   - every profile key is read by at least one rule outside the key list and onboard
 // Exits 1 on any failure so install.sh can refuse to link a broken set.
 
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, lstatSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -58,7 +59,10 @@ function checkSkill(name) {
   const sources = [text];
   if (existsSync(referencesDir)) {
     for (const entry of readdirSync(referencesDir)) {
-      if (entry.endsWith('.md')) sources.push(readFileSync(join(referencesDir, entry), 'utf8'));
+      if (!entry.endsWith('.md')) continue;
+      const path = join(referencesDir, entry);
+      if (!existsSync(path)) fail(`${name}: references/${entry} is missing or broken`);
+      else sources.push(readFileSync(path, 'utf8'));
     }
   }
   checkRefs(name, dir, sources);
@@ -136,7 +140,8 @@ function checkKeyUsage(keys) {
     const referencesDir = join(dir, 'references');
     if (!existsSync(referencesDir)) continue;
     for (const ref of readdirSync(referencesDir)) {
-      if (ref.endsWith('.md')) sources.push(readFileSync(join(referencesDir, ref), 'utf8'));
+      const path = join(referencesDir, ref);
+      if (ref.endsWith('.md') && ref !== 'contract.md' && existsSync(path)) sources.push(readFileSync(path, 'utf8'));
     }
   }
   const text = sources.join('\n');
@@ -155,6 +160,40 @@ for (const entry of entries) {
 }
 if (skillNames.length === 0) fail('no skills found under skills/');
 for (const name of skillNames) checkSkill(name);
+checkSharedCopies(skillNames);
+
+function checkSharedCopy(path, target, label) {
+  if (!existsSync(path)) return fail(`${label} is missing or broken`);
+  if (!lstatSync(path).isFile()) return fail(`${label} must be a regular file`);
+  if (existsSync(target) && !readFileSync(path).equals(readFileSync(target))) {
+    fail(`${label} differs from ${target.slice(ROOT.length + 1)}`);
+  }
+}
+
+function citesBrowserProcedure(dir) {
+  const needle = '`references/browser-verification.md`';
+  const files = [join(dir, 'SKILL.md')];
+  const referencesDir = join(dir, 'references');
+  if (existsSync(referencesDir)) {
+    for (const entry of readdirSync(referencesDir)) {
+      if (entry.endsWith('.md') && entry !== 'browser-verification.md') files.push(join(referencesDir, entry));
+    }
+  }
+  return files.some((file) => existsSync(file) && readFileSync(file, 'utf8').includes(needle));
+}
+
+function checkSharedCopies(names) {
+  for (const name of names) {
+    const dir = join(SKILLS, name);
+    checkSharedCopy(join(dir, 'references', 'contract.md'), join(SHARED, 'contract.md'), `${name}: references/contract.md`);
+    if (!citesBrowserProcedure(dir)) continue;
+    checkSharedCopy(
+      join(dir, 'references', 'browser-verification.md'),
+      join(SHARED, 'browser-verification.md'),
+      `${name}: references/browser-verification.md`,
+    );
+  }
+}
 
 if (errors.length > 0) {
   console.error(`check-skills: ${errors.length} problem(s)`);

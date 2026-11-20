@@ -6,7 +6,7 @@ argument-hint: '<action: commit | branch | pr-body | change-file | release-notes
 
 # deliver
 
-Read `~/.agents/klugzeug/contract.md` and the profile. This skill owns delivery mechanics. It does not judge the code. Before delivering, confirm the work was reviewed (or that the user accepts skipping review) and that the required validation ran. If either is missing, emit `[BLOCKED]`.
+Read `references/contract.md` next to this SKILL.md and the profile. This skill owns delivery mechanics. It does not judge the code. Before delivering, confirm the work was reviewed (or that the user accepts skipping review) and that the required validation ran. If either is missing, emit `[BLOCKED]`.
 
 ## Preconditions
 

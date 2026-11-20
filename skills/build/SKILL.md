@@ -6,7 +6,7 @@ argument-hint: '<scope path> [plan item IDs | bug description | upgrade target]'
 
 # build
 
-Read `~/.agents/klugzeug/contract.md` and the project profile (commands, validation gates, conventions). The request sets the scope; stay inside it.
+Read `references/contract.md` next to this SKILL.md and the project profile (commands, validation gates, conventions). The request sets the scope; stay inside it.
 
 ## Preconditions
 
@@ -32,7 +32,7 @@ Read `~/.agents/klugzeug/contract.md` and the project profile (commands, validat
 - **Bug fix**: step 3 is mandatory. A fix without a test that failed before and passes after is `[VERIFY]`.
 - **Dependency upgrade**: follow `references/dependency-upgrade.md`.
 - **Removal, rename, migration, or deprecation**: follow `references/completeness-inventory.md` before editing, and reconcile it after validation.
-- **Visible UI change**: after the gates, run `~/.agents/klugzeug/browser-verification.md`.
+- **Visible UI change**: after the gates, run `references/browser-verification.md` next to this SKILL.md.
 
 ## Rules
 
