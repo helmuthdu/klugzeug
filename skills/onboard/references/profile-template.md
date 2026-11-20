@@ -19,7 +19,7 @@ Copy this structure into `AGENTS.md`. Every key in the tables is required: write
 | Test (one file) | `<test one file>` |
 | Lint | `<lint>` |
 | Lint fix | `<lint --fix>` |
-| Typecheck | `<typecheck>` or none |
+| Typecheck | `<implementation typecheck>`; include `<test typecheck>` when tests need a separate check, or none |
 | Build | `<build>` |
 | E2E | `<e2e>` or none |
 | Docs | `<docs validate and build>` or none |
@@ -76,10 +76,10 @@ Copy this structure into `AGENTS.md`. Every key in the tables is required: write
 
 | Surface | Gate |
 | ------- | ---- |
-| Source | `<focused tests>`, `<lint>`, `<build>` |
+| Source | `<focused tests>`, `<typecheck>` when available, `<lint>`, `<build>` |
 | Public API | source gates plus `<docs validator>` |
 | UI behaviour | source gates plus browser verification (`~/.agents/klugzeug/browser-verification.md`) |
-| Tests only | focused tests; lint when config changes |
+| Tests only | focused tests; typecheck changed TypeScript tests when the runner does not; lint when config changes |
 | Config or tooling | `<tool tests>`, smoke run of the changed script |
 | Docs | `<docs validator>`, `<docs build>` |
 

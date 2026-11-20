@@ -11,7 +11,7 @@ Read `~/.agents/klugzeug/contract.md`. Onboarding reads the repository and write
 ## 1. Detect (read-only)
 
 1. **Package manager and workspaces**: lockfile, `packageManager` field, `workspaces`, `engines`.
-2. **Commands**: `package.json` scripts (and the root's, in a monorepo) for install, dev, test, single-file test, lint, lint-fix, typecheck, build, e2e, docs, and any validation script. Map each to a command; never invent a missing one.
+2. **Commands**: `package.json` scripts (and the root's, in a monorepo) for install, dev, test, single-file test, lint, lint-fix, typecheck, build, e2e, docs, and any validation script. Map each to a command; never invent a missing one. For TypeScript, inspect `tsconfig` includes/excludes and scripts to see whether test files are type-checked; list separate test-typecheck commands alongside the implementation check.
 3. **Tooling**: test runner config (vitest, jest, playwright), lint (biome, eslint), TypeScript config, framework and bundler from dependencies, browser test tooling.
 4. **Conventions**: `AGENTS.md`, `CONTRIBUTING*`, `.agents/`, and the PR template: search case-insensitively for `pull_request_template.md` / `PULL_REQUEST_TEMPLATE.md` and a `.github/PULL_REQUEST_TEMPLATE/` directory, in the profile's repository and — when the profile lives in a nested package — at the git top level (`git rev-parse --show-toplevel`). **Commit convention**: prefer a documented policy or an enforced hook; recent commit subjects are evidence of style, not proof of a rule, so record an inferred convention with its source. Also detect `CHANGELOG*`, change-file tooling, and protected branch names.
 5. **Boundaries**: CI workflow directories, generated folders, committed build output, and any "do not edit" notes.
@@ -20,7 +20,7 @@ Read `~/.agents/klugzeug/contract.md`. Onboarding reads the repository and write
 
 ## 2. Draft
 
-Use `references/profile-template.md`. Every command must come from a script or config you read, run from the working directory that command's own docs or script imply, and name one script per invocation — some runners pass a second word as an argument instead of running a second script. Fields you cannot confirm are `[VERIFY]`. Link to convention files only if they exist. The template lists every profile key, so the section runs about 90 lines; keep rules that apply only sometimes in the files it links.
+Use `references/profile-template.md`. Every command must come from a script or config you read, run from the working directory that command's own docs or script imply, and name one script per invocation — some runners pass a second word as an argument instead of running a second script. To resolve uncertainty, run a bounded, read-only check only after confirming its command is safe; do not run project scripts whose side effects are unknown. Never run installs, builds, or tests during onboarding. Fields you cannot confirm are `[VERIFY]`. Link to convention files only if they exist. The template lists every profile key, so the section runs about 90 lines; keep rules that apply only sometimes in the files it links.
 
 ## 3. Write (after approval)
 
@@ -30,7 +30,7 @@ Use `references/profile-template.md`. Every command must come from a script or c
 
 ## 4. Refresh
 
-When the profile exists: re-detect each field, and show only the fields that changed, as a diff. Keep hand-written rules. A field whose command no longer resolves becomes `[VERIFY]`, not a guess. Check the profile's cited paths the same way: a path that no longer exists is reported and fixed or marked `[VERIFY]`.
+When the profile exists: re-detect each field, and show only the fields that changed, as a diff. Keep hand-written rules. A field whose command no longer resolves becomes `[VERIFY]`, not a guess. Check the profile's cited paths and cross-references the same way, including directional references such as "above" and "below"; a stale reference is reported and fixed or marked `[VERIFY]`.
 
 ## 5. Report
 

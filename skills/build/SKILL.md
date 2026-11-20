@@ -44,7 +44,7 @@ Read `~/.agents/klugzeug/contract.md` and the project profile (commands, validat
 
 ## Validation
 
-Use the profile's validation table for each surface you changed. Typical surfaces: source (tests, lint, build), public API (surface checks plus docs), tests only (focused tests), config or tooling (its own tests plus a smoke run), and docs (docs validators and build). Report the commands you ran and their results.
+Use the profile's validation table for each surface you changed. Typical surfaces: source (tests, typecheck when available, lint, build), public API (surface checks plus docs), tests only (focused tests), config or tooling (its own tests plus a smoke run), and docs (docs validators and build). When TypeScript test files change, also run a typecheck that includes them; if the implementation Typecheck excludes tests, use the separate test-typecheck command. If no check covers them, report that gap as `[VERIFY]`. Do not assume the test runner type-checks. Report the commands you ran and their results.
 
 ## Report
 
