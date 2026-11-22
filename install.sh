@@ -2,16 +2,15 @@
 # Links klugzeug skills into the canonical agent folder and, optionally, into other client folders.
 #
 #   ~/.agents/skills/<name>   -> <repo>/skills/<name>        (one link per skill)
-#   ~/.agents/klugzeug        -> <repo>/shared               (contract and browser procedure)
 #   <client>/<name>           -> ~/.agents/skills/<name>     (one link per skill, per --client)
 #
+# Skills are self-contained and find each other as siblings, so every skill links into the same folder.
 # Paths that are not links to this installation are never overwritten; they are reported.
 set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 AGENTS_HOME="${KLUGZEUG_HOME:-$HOME/.agents}"
 SKILLS_HOME="$AGENTS_HOME/skills"
-SHARED_HOME="$AGENTS_HOME/klugzeug"
 DRY_RUN=0
 UNINSTALL=0
 CLIENTS=()
@@ -26,9 +25,7 @@ Usage: install.sh [--dry-run] [--uninstall] [--client <dir>]...
   --uninstall     Remove links that point into this repository or into the canonical folder.
 
 Environment:
-  KLUGZEUG_HOME   Canonical agent folder (default: ~/.agents). Skills read
-                  ~/.agents/klugzeug/contract.md by that literal path, so set this
-                  only for test installs.
+  KLUGZEUG_HOME   Canonical agent folder (default: ~/.agents).
 EOF
 }
 
@@ -106,7 +103,7 @@ if [[ $UNINSTALL -eq 0 ]]; then
   fi
 fi
 
-echo "canonical: $AGENTS_HOME"
+echo "canonical: $SKILLS_HOME"
 for name in "${SKILL_NAMES[@]}"; do
   if [[ $UNINSTALL -eq 1 ]]; then
     for client in ${CLIENTS[@]+"${CLIENTS[@]}"}; do
@@ -127,12 +124,6 @@ for name in "${SKILL_NAMES[@]}"; do
     fi
   fi
 done
-
-if [[ $UNINSTALL -eq 1 ]]; then
-  unlink_ours "$SHARED_HOME" "$REPO"
-else
-  link "$REPO/shared" "$SHARED_HOME" || true
-fi
 
 if [[ $DRY_RUN -eq 1 ]]; then
   echo "dry run complete: nothing was changed"

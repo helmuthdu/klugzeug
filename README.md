@@ -1,28 +1,30 @@
 # klugzeug
 
-A stack-agnostic set of eight agent skills for frontend and backend engineering: plan, build, test, review, docs, deliver, pipeline, and onboard. Project specifics live in each repository's `AGENTS.md`, in a `## Project profile` section, not in the skills.
+A stack-agnostic set of eight agent skills for frontend and backend engineering: `kz-plan`, `kz-build`, `kz-test`, `kz-review`, `kz-docs`, `kz-deliver`, `kz-pipeline`, and `kz-onboard`. The `kz-` prefix keeps them from colliding with built-in client skills such as Cursor's `/review` and `/onboard`. Project specifics live in each repository's `AGENTS.md`, in a `## Project profile` section, not in the skills.
 
 ## Skills
 
-| Skill      | Use it for                                                                                   |
-| ---------- | -------------------------------------------------------------------------------------------- |
-| `onboard`  | Writing or refreshing a repository's `## Project profile`                                    |
-| `plan`     | Audits, feature specs, bug triage, and new-module designs in `<scope>/.plan.md`              |
-| `build`    | Implementing, fixing (test first), refactoring, migrating, and upgrading dependencies        |
-| `test`     | Coverage gaps, behaviour-focused tests, flaky-test removal                                   |
-| `review`   | Code, PR, and greenfield reviews; `reliability`, `security`, `a11y`, `perf`, `ux`, and `ui` lenses |
-| `docs`     | Diátaxis guides, JSDoc, README, verified against source                                      |
-| `deliver`  | Commits, branches, PR bodies, change files; only the named action                            |
-| `pipeline` | One run per independent task: ordered stages, approval gates, and one validation            |
+| Skill         | Use it for                                                                                          |
+| ------------- | --------------------------------------------------------------------------------------------------- |
+| `kz-onboard`  | Writing or refreshing a repository's `## Project profile`                                           |
+| `kz-plan`     | Audits, feature specs, bug triage, and new-module designs in `<scope>/.plan.md`                     |
+| `kz-build`    | Implementing, fixing (test first), refactoring, migrating, and upgrading dependencies               |
+| `kz-test`     | Coverage gaps, behaviour-focused tests, flaky-test removal                                          |
+| `kz-review`   | Code, PR, and greenfield reviews; `reliability`, `security`, `a11y`, `perf`, `ux`, and `ui` lenses  |
+| `kz-docs`     | Diátaxis guides, JSDoc, README, verified against source                                             |
+| `kz-deliver`  | Commits, branches, PR bodies, pull requests, change files; only the named action                    |
+| `kz-pipeline` | One run per independent task: ordered stages, plan approval, and one validation                     |
 
-Ownership: `review` finds problems and never edits; `build` edits; `deliver` only ships. `plan` writes only `.plan.md`.
+Ownership: `kz-review` finds problems and never edits; `kz-build` edits; `kz-deliver` only ships. `kz-plan` writes only `.plan.md`; `kz-onboard` writes only the profile section.
 
 ## Shared files
 
-- `shared/contract.md`: approval gates, markers, severity, finding format, validation rules, plan file format. Every skill reads it.
-- `shared/browser-verification.md`: the procedure for checking UI in a real browser. Used by `build` and `review`.
+- `shared/contract.md`: profile resolution, write scope, approval gates, markers, evidence, validation, findings, and the plan file. Every skill reads it on activation, so it stays short.
+- `shared/browser-verification.md`: the procedure for checking UI in a real browser. Used by `kz-build` and `kz-review`.
 
-Each skill carries the shared files it needs as regular copies under `references/` so it can be installed independently. Update the copies when their source changes; `check-skills` verifies they match.
+Each skill carries the shared files it cites as regular copies under `references/`, because installers copy skill folders one by one. Edit `shared/`, then run `node scripts/check-skills.mjs --fix` to regenerate the copies.
+
+Skills that use another skill (`kz-pipeline` runs every stage; `kz-plan` reads `kz-review`'s checklist and lenses) find it as a sibling directory, so install all eight into the same folder.
 
 ## Install
 
@@ -30,18 +32,20 @@ From a clone, link the skills into your agent folders. This is the install to ke
 
 ```sh
 ./install.sh --dry-run                       # show what would be linked
-./install.sh                                 # link into ~/.agents/skills and ~/.agents/klugzeug
+./install.sh                                 # link into ~/.agents/skills
 ./install.sh --client ~/.claude/skills       # also link each skill into another client folder
 ./install.sh --uninstall                     # remove links that point into this repository
 ```
 
 The installer first runs `scripts/check-skills.mjs` and refuses to link a broken set. It never overwrites a path that is not a link into this repository; it reports the collision.
 
-On a machine that does not have the clone, install the published branch. The skills call each other under `~/.agents/skills`, so select all eight skills and the agents you use. Before installing, check for existing skills with the same names in those agents and back up or resolve any collisions: the CLI can overwrite them without asking.
+On a machine that does not have the clone, install the published branch. Select all eight skills and the agents you use. Before installing, check for existing skills with the same names in those agents and back up or resolve any collisions: the CLI can overwrite them without asking.
+
+The `kz-*` names replace the former unprefixed skill names. Remove old registrations with the method that installed them before installing or updating this set; no aliases are provided.
 
 ```sh
 npx skills add helmuthdu/klugzeug -g
-npx skills update -g plan build test review docs deliver pipeline onboard
+npx skills update -g kz-plan kz-build kz-test kz-review kz-docs kz-deliver kz-pipeline kz-onboard
 npx skills remove helmuthdu/klugzeug -g
 ```
 
@@ -51,23 +55,24 @@ Before relying on a client, confirm that it reads the folder you linked. Cursor 
 
 ## Project profile
 
-`onboard` writes a `## Project profile` section into `AGENTS.md` using the canonical **Profile keys** from `shared/contract.md` (commands, test helpers, validation gates, conventions). Each key is a value or `none`. The template is `skills/onboard/references/profile-template.md`; `check-skills` fails when the template omits a key.
+`kz-onboard` writes a `## Project profile` section into `AGENTS.md` from `skills/kz-onboard/references/profile-template.md`, the canonical list of profile keys (commands, test helpers, conventions, validation gates). Each key is a value or `none`. `check-skills` fails when a template key is read by no skill.
 
-Resolution order: the user's request, then the profile (walk up until an `AGENTS.md` contains `## Project profile`), then linked files, then detection from `package.json` and config files, then a question to the user. Subtree rules in nearer `AGENTS.md` files bind their directories. A command that is only guessed is marked `[VERIFY]` and never reported as run.
+Resolution order: the user's request, then the profile (walk up until an `AGENTS.md` contains `## Project profile`), then linked files, then detection from manifests, scripts, and tool configs, then a question to the user. Subtree rules in nearer `AGENTS.md` files bind their directories. A command that is only guessed is marked `[VERIFY]` and never reported as run.
 
 ## Design rules
 
-- One canonical shared contract, with checked copies for installation.
-- Each `SKILL.md` is under 110 lines. Checklists and templates live in `references/` and load only when used.
-- Descriptions name the trigger words, and skills do not overlap. Reliability, security, accessibility, performance, UX, and UI are lenses of `review`, not separate skills.
-- Skills never widen the scope the request sets.
-- The contract's smallest-change rule applies to every skill.
+- One canonical shared contract, kept short because every activation pays for it; checked copies for installation.
+- Each `SKILL.md` stays within a word budget. Checklists and templates live in `references/`, are cited directly from `SKILL.md`, and load only when used.
+- Descriptions say what the skill does and when to use it, without overlapping. Reliability, security, accessibility, performance, UX, and UI are lenses of `kz-review`, not separate skills.
+- Approval gates match risk: the request authorises the action it names, and the contract lists the decisions that always stop.
+- Skills never widen the scope the request sets, and the contract's smallest-change rule applies to every skill.
 
 ## Check
 
 ```sh
-node scripts/check-skills.mjs
+node scripts/check-skills.mjs          # validate
+node scripts/check-skills.mjs --fix    # regenerate shared copies, then validate
 node --test scripts/check-skills.test.mjs
 ```
 
-Checks frontmatter, name-to-directory match, line budget, and that every referenced file exists.
+The checker validates spec frontmatter (name, description, known fields), word budgets for each `SKILL.md` and for `SKILL.md` plus the contract, that every cited file and sibling skill exists, that no reference file is orphaned, that shared copies match, that markers and plan statuses use the contract's vocabulary, and that every profile key is read by a skill.

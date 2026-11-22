@@ -34,38 +34,96 @@ function withFixture(run) {
   }
 }
 
-function check(root) {
-  return spawnSync(process.execPath, [join(root, 'scripts', 'check-skills.mjs')], { encoding: 'utf8' });
+function check(root, ...args) {
+  return spawnSync(process.execPath, [join(root, 'scripts', 'check-skills.mjs'), ...args], { encoding: 'utf8' });
 }
+
+function edit(path, change) {
+  writeFileSync(path, change(readFileSync(path, 'utf8')));
+}
+
+function assertFails(root, pattern) {
+  const result = check(root);
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stderr, pattern);
+}
+
+test('the repository passes its own checks', () => {
+  const result = spawnSync(process.execPath, [join(ROOT, 'scripts', 'check-skills.mjs')], { encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+});
 
 test('reports profile keys that no rule reads', () => {
   withFixture((root) => {
-    const perf = join(root, 'skills', 'review', 'references', 'perf.md');
-    writeFileSync(perf, readFileSync(perf, 'utf8').replaceAll('**Bundle budget**', 'Bundle budget'));
-    const result = check(root);
-    assert.equal(result.status, 1, result.stdout + result.stderr);
-    assert.match(result.stderr, /profile key "Bundle budget" is not read/);
+    edit(join(root, 'skills', 'kz-review', 'references', 'perf.md'), (text) => text.replaceAll('**Bundle budget**', 'Bundle budget'));
+    assertFails(root, /profile key "Bundle budget" is not read/);
   });
 });
 
-test('reports shared reference copies that differ from their source', () => {
+test('reports shared reference copies that differ from their source, and --fix repairs them', () => {
   withFixture((root) => {
-    const contract = join(root, 'skills', 'build', 'references', 'contract.md');
-    writeFileSync(contract, `${readFileSync(contract, 'utf8')}\nChanged copy\n`);
-    const result = check(root);
-    assert.equal(result.status, 1, result.stdout + result.stderr);
-    assert.match(result.stderr, /build: references\/contract\.md differs from shared\/contract\.md/);
+    const contract = join(root, 'skills', 'kz-build', 'references', 'contract.md');
+    edit(contract, (text) => `${text}\nChanged copy\n`);
+    assertFails(root, /kz-build: references\/contract\.md differs from shared\/contract\.md/);
+    const fixed = check(root, '--fix');
+    assert.equal(fixed.status, 0, fixed.stdout + fixed.stderr);
+    assert.equal(readFileSync(contract, 'utf8'), readFileSync(join(root, 'shared', 'contract.md'), 'utf8'));
   });
 });
 
 test('rejects shared references that cannot be packaged independently', () => {
   withFixture((root) => {
-    const contract = join(root, 'skills', 'build', 'references', 'contract.md');
+    const contract = join(root, 'skills', 'kz-build', 'references', 'contract.md');
     unlinkSync(contract);
     symlinkSync('../../../shared/contract.md', contract);
+    assertFails(root, /kz-build: references\/contract\.md must be a regular file/);
+  });
+});
+
+test('reports reference files that SKILL.md does not cite', () => {
+  withFixture((root) => {
+    writeFileSync(join(root, 'skills', 'kz-docs', 'references', 'unused.md'), '# Unused\n');
+    assertFails(root, /kz-docs: references\/unused\.md is not cited by SKILL\.md/);
+  });
+});
+
+test('reports cited files and sibling skills that do not exist', () => {
+  withFixture((root) => {
+    edit(join(root, 'skills', 'kz-plan', 'SKILL.md'), (text) => text.replace('`../kz-review/SKILL.md`', '`../kz-reviewer/SKILL.md`'));
+    assertFails(root, /kz-plan: cites sibling skill "kz-reviewer", which does not exist/);
+    edit(join(root, 'skills', 'kz-build', 'SKILL.md'), (text) => `${text}\nSee \`references/missing.md\`.\n`);
+    assertFails(root, /kz-build: cited file does not exist: references\/missing\.md/);
+  });
+});
+
+test('reports markers and plan statuses outside the contract vocabulary', () => {
+  withFixture((root) => {
+    edit(join(root, 'skills', 'kz-test', 'SKILL.md'), (text) => `${text}\nMark it [TODO] and \`— SHIPPED\`.\n`);
     const result = check(root);
     assert.equal(result.status, 1, result.stdout + result.stderr);
-    assert.match(result.stderr, /build: references\/contract\.md must be a regular file/);
+    assert.match(result.stderr, /unknown marker \[TODO\]/);
+    assert.match(result.stderr, /unknown plan status "— SHIPPED"/);
+  });
+});
+
+test('enforces spec-valid frontmatter', () => {
+  withFixture((root) => {
+    edit(join(root, 'skills', 'kz-docs', 'SKILL.md'), (text) => text.replace('name: kz-docs', 'name: kz-docs\ntrigger: always'));
+    assertFails(root, /kz-docs: unknown frontmatter field "trigger"/);
+  });
+});
+
+test('rejects unknown frontmatter keys with underscores', () => {
+  withFixture((root) => {
+    edit(join(root, 'skills', 'kz-docs', 'SKILL.md'), (text) => text.replace('name: kz-docs', 'name: kz-docs\ntrigger_name: always'));
+    assertFails(root, /kz-docs: unknown frontmatter field "trigger_name"/);
+  });
+});
+
+test('enforces the SKILL.md word budget', () => {
+  withFixture((root) => {
+    edit(join(root, 'skills', 'kz-deliver', 'SKILL.md'), (text) => `${text}\n${'word '.repeat(900)}\n`);
+    assertFails(root, /kz-deliver: SKILL\.md body is \d+ words/);
   });
 });
 
@@ -86,10 +144,7 @@ test('independently packaged skills contain their required shared references', (
       });
       assert.ok(existsSync(join(dest, 'references', 'contract.md')), `${entry.name} is missing its contract`);
       if (existsSync(join(source, 'references', 'browser-verification.md'))) {
-        assert.ok(
-          existsSync(join(dest, 'references', 'browser-verification.md')),
-          `${entry.name} is missing browser verification`,
-        );
+        assert.ok(existsSync(join(dest, 'references', 'browser-verification.md')), `${entry.name} is missing browser verification`);
       }
     }
   } finally {
