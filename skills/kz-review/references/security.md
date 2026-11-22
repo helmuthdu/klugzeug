@@ -38,6 +38,7 @@ Cite a CWE identifier in the finding when one fits.
 - A `catch` that treats a failed check as success: granting access, skipping validation, or returning the privileged result.
 
 **Secrets and leakage**
+- Hardcoded credentials (API keys, private keys, tokens, connection strings) or committed `.env` files anywhere in the repository, not only the reviewed scope. Never reproduce any part of a found secret: cite the path or key only, and recommend rotation.
 - Secrets, tokens, or PII in the client bundle, in environment variables the bundler inlines into client code, in URLs, or in logs.
 - Stack traces or internal details returned to the user.
 - Tokens in `localStorage` or `sessionStorage` when an httpOnly cookie is available; access to web storage not guarded for `SecurityError`.

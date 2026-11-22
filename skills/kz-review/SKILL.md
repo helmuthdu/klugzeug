@@ -11,7 +11,7 @@ Read `references/contract.md` next to this SKILL.md and the profile. A review ch
 ## Lenses
 
 - **code** (default): correctness, API design, types, tests, UI state when the scope renders UI, handlers when it accepts a request or a write, and data flow.
-- **pr**: the complete diff against its stated intent, plus the call sites of every changed public contract.
+- **pr**: the complete diff against its stated intent, plus the call sites of every changed public contract, and whether a simpler change would meet the same intent.
 - **greenfield**: challenge boundaries and abstractions, and recommend removing those that add no benefit.
 - **reliability**, **security**, **a11y**, **perf**, **ux**, **ui**: apply the matching `references/<lens>.md` checklist on top of `code`. Each lens needs its own kind of evidence: reliability needs the write or job traced to its caller-visible result, security needs an input-to-sink path, perf needs a measurement, ux needs a named user task and screen state, ui needs the design reference a finding departs from.
 

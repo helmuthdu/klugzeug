@@ -20,7 +20,7 @@ Skills name profile keys in bold, for example **Test (all)**. A key set to `none
 
 - The request sets the write scope. "Fix", "implement", "build", "update", "refactor", "migrate" authorise changes inside the named scope. "Review", "audit", "plan", "check", "explain" are read-only, except that `kz-plan` writes `.plan.md`.
 - Never widen the scope. Related occurrences are fixed only when they are inside the scope and verifiable; otherwise they are `[DEFERRED]`.
-- Check `git status` before editing and preserve changes you did not make; never revert or reformat them.
+- Check `git status` before editing and preserve changes you did not make, including other agents' concurrent work; never revert, stash, or reformat them. When their change breaks yours, fix the break in place.
 - Never hand-edit generated files or lockfiles. Lockfiles change only through the package manager during an approved change.
 
 ## Smallest change
@@ -48,6 +48,8 @@ Stop and emit `[BLOCKED] <decision>` before:
 - choosing between materially different designs.
 
 A public export is anything reachable from **Public API entry points**. When that key is `none` or absent, whether a change is breaking is `[VERIFY]`; do not guess.
+
+A request satisfies a gate only by explicitly approving that kind of decision, such as "breaking changes are approved"; the approval covers nothing else.
 
 Never use `--no-verify`, skip hooks, or bypass a check to get past a gate.
 

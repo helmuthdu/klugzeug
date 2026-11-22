@@ -25,7 +25,7 @@ A fact taken from a procedure belongs in reference. A reason belongs in explanat
 
 ## Flow
 
-1. Read the page or example, and the source that controls each claim: exports, signatures, defaults, errors, and emitted events.
+1. Read the page or example, and the source that controls each claim: exports, signatures, defaults, errors, and emitted events. Before writing a new page, read an existing page of the same quadrant and mirror its structure and tone.
 2. Verify each claim. Anything you cannot verify is `[VERIFY]`, not written as fact.
 3. **JSDoc** on each public export: a one-sentence summary; parameters and return value when they are not obvious; thrown errors; one short example for a non-trivial API. Do not restate the type.
 4. For an API change, update reference first, then the pages that describe it, then the examples.
@@ -35,7 +35,8 @@ A fact taken from a procedure belongs in reference. A reason belongs in explanat
 
 ## Rules
 
-- Do not document behaviour the source does not guarantee.
+- Do not document behaviour the source does not guarantee. Fix or delete content that describes behaviour the source no longer has.
+- Write only the quadrants the scope needs; a small module may need only reference and a README section.
 - Write how-tos from the user's goal, not from the tool's controls. Titles say exactly what the guide shows.
 - Reference mirrors the structure of the code and includes an example where it clarifies usage.
 - No marketing language, emoji, or performance claims you have not measured.
@@ -45,7 +46,7 @@ A fact taken from a procedure belongs in reference. A reason belongs in explanat
 
 ## Output
 
-- Changed pages, each with its quadrant.
+- Changed pages, each with its quadrant, and removed pages with the reason.
 - Claims marked `[VERIFY]`.
 - Validators and builds run, with results.
 - `[DEFERRED]` for pages outside the scope.

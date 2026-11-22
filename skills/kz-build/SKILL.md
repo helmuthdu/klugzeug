@@ -1,6 +1,6 @@
 ---
 name: kz-build
-description: Implement, fix, refactor, rename, or migrate code, tests, or tooling, and upgrade dependencies — including .plan.md items, approved review findings, and bug fixes that start with a failing regression test. Use when asked to implement, build, fix, refactor, migrate, rename, upgrade dependencies, or work through a plan.
+description: Implement, fix, refactor, rename, or migrate code, tests, or tooling, and upgrade dependencies — including .plan.md items, approved review findings, failing builds or test suites, and bug fixes that start with a failing regression test. Use when asked to implement, build, fix, refactor, migrate, rename, upgrade dependencies, or work through a plan.
 argument-hint: '<scope path> [plan item IDs | bug description | upgrade target]'
 ---
 
@@ -26,6 +26,7 @@ Read `references/contract.md` next to this SKILL.md and the project profile. The
 
 ## Special cases
 
+- **Failing build, typecheck, or tests**: run the failing command first and keep its output as the reproduction; with a last known-good ref, diff against it to narrow the cause. Fix related type errors before test failures, since one can cascade into many. Rerun after each fix until the command passes or you reach a `[BLOCKED]`. Never add a suppression (`any`, `@ts-ignore`, `@ts-expect-error`, `.skip`) or loosen config to force green.
 - **Dependency upgrade**: follow `references/dependency-upgrade.md`.
 - **Removal, rename, migration, or deprecation**: build the inventory in `references/completeness-inventory.md` before editing, and reconcile it after validation.
 - **Visible UI change**: after the gates, run `references/browser-verification.md`. Changes with no rendered UI skip it.
