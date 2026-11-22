@@ -17,6 +17,8 @@ A stack-agnostic set of eight agent skills for frontend and backend engineering:
 
 Ownership: `kz-review` finds problems and never edits; `kz-build` edits; `kz-deliver` only ships. `kz-plan` writes only `.plan.md`; `kz-onboard` writes only the profile section.
 
+[`docs/snippets.md`](docs/snippets.md) has short prompts for everyday work (reviews, fixes, new packages, docs) that invoke these skills.
+
 ## Shared files
 
 - `shared/contract.md`: profile resolution, write scope, approval gates, markers, evidence, validation, findings, and the plan file. Every skill reads it on activation, so it stays short.
@@ -75,4 +77,4 @@ node scripts/check-skills.mjs --fix    # regenerate shared copies, then validate
 node --test scripts/check-skills.test.mjs
 ```
 
-The checker validates spec frontmatter (name, description, known fields), word budgets for each `SKILL.md` and for `SKILL.md` plus the contract, that every cited file and sibling skill exists, that no reference file is orphaned, that shared copies match, that markers and plan statuses use the contract's vocabulary, and that every profile key is read by a skill.
+The checker validates spec frontmatter (name, description, known fields), word budgets for each `SKILL.md` and for `SKILL.md` plus the contract, that every cited file and sibling skill exists, that no reference file is orphaned, that shared copies match, that markers and plan statuses use the contract's vocabulary, and that every profile key is read by a skill, and that each snippet invokes an existing skill with modes from its `argument-hint`.

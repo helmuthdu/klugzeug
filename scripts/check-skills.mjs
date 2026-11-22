@@ -210,6 +210,50 @@ function checkProfileKeys() {
 
 checkProfileKeys();
 
+// Snippets invoke skills as `/kz-<skill> <mode words> [slots]`. Each skill must exist, and each mode
+// word must appear among that skill's explicit argument-hint choices.
+function modesFromHint(hint) {
+  const modes = new Set();
+  const addChoices = (choices) => {
+    for (const choice of choices.split('|')) {
+      const value = choice.replace(/^\s*[a-z-]+:\s*/, '').trim();
+      const match = value.match(/^([a-z0-9][a-z0-9-]*)(?:\s+<[^<>]+>)?$/);
+      if (match) modes.add(match[1]);
+    }
+  };
+  for (const [, choices] of hint.matchAll(/\[([^\[\]]*\|[^\[\]]*)\]/g)) addChoices(choices);
+  for (const [, choices] of hint.matchAll(/<([^<>]*\|[^<>]*)>/g)) addChoices(choices);
+  for (const [, choice] of hint.matchAll(/\[([^\[\]<>|]+)\]/g)) {
+    const value = choice.trim();
+    if (/^[a-z0-9]+(?:-[a-z0-9]+)+$/.test(value)) modes.add(value);
+  }
+  return modes;
+}
+
+function checkSnippets() {
+  const path = join(ROOT, 'docs', 'snippets.md');
+  if (!existsSync(path)) return;
+  const modes = new Map();
+  for (const name of skillNames) {
+    const file = join(SKILLS, name, 'SKILL.md');
+    const hint = existsSync(file) ? (parseFrontmatter(read(file))?.fields['argument-hint'] ?? '') : '';
+    modes.set(name, modesFromHint(hint));
+  }
+  read(path)
+    .split('\n')
+    .forEach((line, index) => {
+      if (!line.startsWith('/')) return;
+      const [command, ...rest] = line.replace(/\[[^\]]*\]/g, ' ').trim().split(/\s+/);
+      const skill = command.slice(1);
+      if (!modes.has(skill)) return fail(`docs/snippets.md:${index + 1}: unknown skill ${command}`);
+      for (const word of rest.filter((token) => !token.includes('/'))) {
+        if (!modes.get(skill).has(word)) fail(`docs/snippets.md:${index + 1}: "${word}" is not a mode in ${skill}'s argument-hint`);
+      }
+    });
+}
+
+checkSnippets();
+
 if (errors.length > 0) {
   console.error(`check-skills: ${errors.length} problem(s)`);
   for (const message of errors) console.error(`  - ${message}`);

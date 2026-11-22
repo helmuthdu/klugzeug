@@ -17,6 +17,7 @@ This template is the canonical list of profile keys. Copy its structure into `AG
 | Browser-test command | `<runs browser tests against a running app>` or none |
 | Test (all) | `<full test run>` |
 | Test (one file) | `<single test file>` |
+| Coverage command | `<reports test coverage>` or none |
 | Lint | `<lint>` |
 | Lint fix | `<lint and apply fixes>` |
 | Typecheck | `<implementation typecheck>`; plus `<test typecheck>` when tests need a separate check; or none |

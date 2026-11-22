@@ -28,6 +28,7 @@ function withFixture(run) {
     cpSync(join(ROOT, 'scripts', 'check-skills.mjs'), join(root, 'scripts', 'check-skills.mjs'));
     cpSync(join(ROOT, 'shared'), join(root, 'shared'), { recursive: true, verbatimSymlinks: true });
     cpSync(join(ROOT, 'skills'), join(root, 'skills'), { recursive: true, verbatimSymlinks: true });
+    cpSync(join(ROOT, 'docs'), join(root, 'docs'), { recursive: true });
     run(root);
   } finally {
     rmSync(root, { recursive: true, force: true });
@@ -124,6 +125,44 @@ test('enforces the SKILL.md word budget', () => {
   withFixture((root) => {
     edit(join(root, 'skills', 'kz-deliver', 'SKILL.md'), (text) => `${text}\n${'word '.repeat(900)}\n`);
     assertFails(root, /kz-deliver: SKILL\.md body is \d+ words/);
+  });
+});
+
+test('reports snippets that invoke unknown skills or modes', () => {
+  withFixture((root) => {
+    edit(join(root, 'docs', 'snippets.md'), (text) =>
+      text.replace('/kz-review pr [', '/kz-review audit [').replace('/kz-test [path]', '/kz-tests [path]'),
+    );
+    const result = check(root);
+    assert.equal(result.status, 1, result.stdout + result.stderr);
+    assert.match(result.stderr, /"audit" is not a mode in kz-review's argument-hint/);
+    assert.match(result.stderr, /unknown skill \/kz-tests/);
+  });
+});
+
+test('does not accept argument-hint placeholders as snippet modes', () => {
+  withFixture((root) => {
+    edit(join(root, 'docs', 'snippets.md'), (text) => `${text}\n/kz-test path\n`);
+    const result = check(root);
+    assert.equal(result.status, 1, result.stdout + result.stderr);
+    assert.match(result.stderr, /"path" is not a mode in kz-test's argument-hint/);
+  });
+});
+
+test('accepts a standalone explicit argument-hint mode', () => {
+  withFixture((root) => {
+    edit(join(root, 'docs', 'snippets.md'), (text) => `${text}\n/kz-test audit-only\n`);
+    const result = check(root);
+    assert.equal(result.status, 0, result.stdout + result.stderr);
+  });
+});
+
+test('does not accept descriptive argument-hint alternatives as snippet modes', () => {
+  withFixture((root) => {
+    edit(join(root, 'docs', 'snippets.md'), (text) => `${text}\n/kz-build plan\n`);
+    const result = check(root);
+    assert.equal(result.status, 1, result.stdout + result.stderr);
+    assert.match(result.stderr, /"plan" is not a mode in kz-build's argument-hint/);
   });
 });
 

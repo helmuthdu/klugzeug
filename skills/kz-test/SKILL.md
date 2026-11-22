@@ -1,12 +1,12 @@
 ---
 name: kz-test
-description: Audit, add, fix, or clean up automated tests — coverage gaps per public contract, behaviour-focused unit, component, API, and e2e tests, network-level mocking, and flaky or brittle tests. Use when asked to write, add, improve, fix, or clean up tests, check coverage, or fix flaky tests.
+description: Audit, add, fix, restructure, or clean up automated tests — coverage gaps per public contract, behaviour-focused unit, component, API, and e2e tests, network-level mocking, and flaky or brittle tests. Use when asked to write, add, improve, fix, or clean up tests, check coverage, or fix flaky tests.
 argument-hint: '<scope path> [focus] [audit-only]'
 ---
 
 # kz-test
 
-Read `references/contract.md` next to this SKILL.md and the profile's **Test (all)**, **Test (one file)**, and **Test layers** keys. Assess by default and report gaps; change tests only when the request asks to add, write, fix, clean up, or improve them. Audit a large scope one module at a time.
+Read `references/contract.md` next to this SKILL.md and the profile's **Test (all)**, **Test (one file)**, and **Test layers** keys. Assess by default and report gaps; change tests only when the request asks to add, write, fix, restructure, clean up, or improve them. Audit a large scope one module at a time.
 
 ## 1. Baseline
 
@@ -33,6 +33,7 @@ Do not invent edge cases the code does not have. Also flag existing tests that a
 - Snapshot only stable, human-readable output. Keep tests free of the language's escape hatches (`any`, `as`, unexplained `!` in TypeScript).
 - For component and DOM tests, follow `references/frontend-testing.md`.
 - Never change a test to hide a real bug. Adjust one only when the behaviour change is intentional, and say so.
+- When moving or renaming test files, confirm the runner's include patterns still discover them. When restructuring or removing tests and **Coverage command** is set, run it before and after, and justify any drop.
 
 ## 4. Layers
 

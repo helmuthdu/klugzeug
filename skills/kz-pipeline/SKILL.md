@@ -19,10 +19,10 @@ A request with one outcome is one task. When it names several outcomes, load `re
 
 Stage `<stage>` runs the `kz-<stage>` skill installed beside this one (`../kz-<stage>/SKILL.md` from this skill's directory). Load it before running the stage, and name it in a subagent's brief.
 
-1. **plan**: write or validate `<scope>/.plan.md` and present it. Wait for the user to approve the items, or a named subset, unless the request explicitly says to proceed without stopping; items that hit a contract approval gate always wait.
+1. **plan**: write or validate `<scope>/.plan.md` and present it. Wait for the user to approve the items, or a named subset, unless the request explicitly says to proceed without stopping. Then challenge the plan yourself first: drop or simplify any item that does not clearly improve correctness, simplicity, or developer experience, and report what you dropped. Items that hit a contract approval gate the request did not approve still wait.
 2. **build**: implement the approved items. Skipped in assess mode.
 3. **test**: gap analysis starting from the files `build` changed; write only the tests still missing inside the approved scope.
-4. **review**: the `code` lens, plus a lens for each concern the change touches (`reliability`, `security`, `a11y`, `perf`, `ux`, `ui`). Present the findings. Fixing them needs approval and a second `build` pass, after which only the fixed findings are re-reviewed. A finding is `— FIXED` only after that pass.
+4. **review**: the `code` lens, plus a lens for each concern the change touches (`reliability`, `security`, `a11y`, `perf`, `ux`, `ui`). Present the findings. Fixing them needs approval (a request to proceed without stopping approves fixing Critical and High findings) and a second `build` pass, after which only the fixed findings are re-reviewed. A finding is `— FIXED` only after that pass.
 5. **docs**: update only the pages the approved change touches, adding what `build` left out.
 6. **deliver**: only when the task names a delivery action (commit, branch, PR body, pull request, change file, release notes). Otherwise stop after `docs` and report.
 

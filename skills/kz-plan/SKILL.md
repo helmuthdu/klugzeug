@@ -24,7 +24,7 @@ When an item touches security, accessibility, performance, UX, UI, or reliabilit
 - Write the Assessment as findings in the contract's format, grouped by area, each citing `file:line`. A short narrative may open it.
 - Verify every file and symbol before naming it in the plan.
 - One item per independently verifiable change; keep the plan as small as the request. Prefer deleting obsolete patterns to wrapping them.
-- Any change to an existing public export is `Breaking: Yes` with migration notes, and stays `[BLOCKED]` until the user confirms it.
+- Any change to an existing public export is `Breaking: Yes` with migration notes, and stays `[BLOCKED]` until the user confirms it, in the request or at approval.
 - **Done when** is observable. For rendered UI, it names the states the change can show and one check a test or browser can observe. For a handler, query, job, or persisted record, it names the success and failure a caller can observe and the test that shows them. Mixed items need both.
 
 ## Output: `<scope>/.plan.md`
