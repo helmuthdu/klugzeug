@@ -59,6 +59,8 @@ Never use `--no-verify`, skip hooks, or bypass a check to get past a gate.
 - `[VERIFY] <claim>: <reason>`: not confirmed from source or by a run.
 - `[DEFERRED] <work>: <reason>`: valid but out of scope for this pass.
 
+A lens file may add a finding marker of its own; the `security` lens uses `[VULN]` and `[CONCERN]`. No other markers exist.
+
 ## Evidence
 
 - Source code and tests are the truth. Docs, comments, plans, and past conversations are claims to check against them; a stale `.plan.md` authorises nothing.

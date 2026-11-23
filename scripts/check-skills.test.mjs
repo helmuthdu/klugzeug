@@ -107,6 +107,42 @@ test('reports markers and plan statuses outside the contract vocabulary', () => 
   });
 });
 
+test('reports descriptions that do not say when to use the skill', () => {
+  withFixture((root) => {
+    edit(join(root, 'skills', 'kz-docs', 'SKILL.md'), (text) =>
+      text.replace(/description: .*\n/, 'description: Writes documentation.\n'),
+    );
+    assertFails(root, /kz-docs: description must state when to use the skill/);
+  });
+});
+
+test('reports a SKILL.md that does not cite the shared contract', () => {
+  withFixture((root) => {
+    edit(join(root, 'skills', 'kz-test', 'SKILL.md'), (text) =>
+      text.replace('Read `references/contract.md` next to this SKILL.md and', 'Read'),
+    );
+    assertFails(root, /kz-test: SKILL\.md must tell the agent to read `references\/contract\.md`/);
+  });
+});
+
+test('reports a missing argument-hint', () => {
+  withFixture((root) => {
+    edit(join(root, 'skills', 'kz-onboard', 'SKILL.md'), (text) =>
+      text.replace(/^argument-hint: .*\n/m, ''),
+    );
+    assertFails(root, /kz-onboard: frontmatter argument-hint is missing/);
+  });
+});
+
+test('the delivery gate names the review verdicts', () => {
+  const review = readFileSync(join(ROOT, 'skills', 'kz-review', 'SKILL.md'), 'utf8');
+  const deliver = readFileSync(join(ROOT, 'skills', 'kz-deliver', 'SKILL.md'), 'utf8');
+  assert.match(review, /Verdict: Ready.*Needs work.*Block/, 'kz-review defines the verdict vocabulary');
+  for (const verdict of ['Needs work', 'Block']) {
+    assert.match(deliver, new RegExp(verdict), `kz-deliver must gate on the "${verdict}" verdict`);
+  }
+});
+
 test('enforces spec-valid frontmatter', () => {
   withFixture((root) => {
     edit(join(root, 'skills', 'kz-docs', 'SKILL.md'), (text) => text.replace('name: kz-docs', 'name: kz-docs\ntrigger: always'));

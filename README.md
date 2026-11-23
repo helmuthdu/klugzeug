@@ -4,16 +4,16 @@ A stack-agnostic set of eight agent skills for frontend and backend engineering:
 
 ## Skills
 
-| Skill         | Use it for                                                                                          |
-| ------------- | --------------------------------------------------------------------------------------------------- |
-| `kz-onboard`  | Writing or refreshing a repository's `## Project profile`                                           |
-| `kz-plan`     | Audits, feature specs, bug triage, and new-module designs in `<scope>/.plan.md`                     |
-| `kz-build`    | Implementing, fixing (test first), refactoring, migrating, and upgrading dependencies               |
-| `kz-test`     | Coverage gaps, behaviour-focused tests, flaky-test removal                                          |
-| `kz-review`   | Code, PR, and greenfield reviews; `reliability`, `security`, `a11y`, `perf`, `ux`, and `ui` lenses  |
-| `kz-docs`     | Diátaxis guides, JSDoc, README, verified against source                                             |
-| `kz-deliver`  | Commits, branches, PR bodies, pull requests, change files; only the named action                    |
-| `kz-pipeline` | One run per independent task: ordered stages, plan approval, and one validation                     |
+| Skill         | Use it for                                                                                         |
+| ------------- | -------------------------------------------------------------------------------------------------- |
+| `kz-onboard`  | Writing or refreshing a repository's `## Project profile`                                          |
+| `kz-plan`     | Audits, feature specs, bug triage, and new-module designs in `<scope>/.plan.md`                    |
+| `kz-build`    | Implementing, fixing (test first), refactoring, migrating, and upgrading dependencies              |
+| `kz-test`     | Coverage gaps, behaviour-focused tests, flaky-test removal                                         |
+| `kz-review`   | Code, PR, and greenfield reviews; `reliability`, `security`, `a11y`, `perf`, `ux`, and `ui` lenses |
+| `kz-docs`     | Diátaxis guides, JSDoc, README, verified against source                                            |
+| `kz-deliver`  | Commits, branches, PR bodies, pull requests, change files; only the named action                   |
+| `kz-pipeline` | One run per independent task: ordered stages, plan approval, and one validation                    |
 
 Ownership: `kz-review` finds problems and never edits; `kz-build` edits; `kz-deliver` only ships. `kz-plan` writes only `.plan.md`; `kz-onboard` writes only the profile section.
 
@@ -42,8 +42,6 @@ From a clone, link the skills into your agent folders. This is the install to ke
 The installer first runs `scripts/check-skills.mjs` and refuses to link a broken set. It never overwrites a path that is not a link into this repository; it reports the collision.
 
 On a machine that does not have the clone, install the published branch. Select all eight skills and the agents you use. Before installing, check for existing skills with the same names in those agents and back up or resolve any collisions: the CLI can overwrite them without asking.
-
-The `kz-*` names replace the former unprefixed skill names. Remove old registrations with the method that installed them before installing or updating this set; no aliases are provided.
 
 ```sh
 npx skills add helmuthdu/klugzeug -g
@@ -77,4 +75,4 @@ node scripts/check-skills.mjs --fix    # regenerate shared copies, then validate
 node --test scripts/check-skills.test.mjs
 ```
 
-The checker validates spec frontmatter (name, description, known fields), word budgets for each `SKILL.md` and for `SKILL.md` plus the contract, that every cited file and sibling skill exists, that no reference file is orphaned, that shared copies match, that markers and plan statuses use the contract's vocabulary, and that every profile key is read by a skill, and that each snippet invokes an existing skill with modes from its `argument-hint`.
+The checker validates spec frontmatter (name, description with a "Use when" clause, argument-hint, known fields), word budgets for each `SKILL.md` and for `SKILL.md` plus the contract, that every skill tells the agent to read `references/contract.md`, that every cited file and sibling skill exists, that no reference file is orphaned, that shared copies match, that markers and plan statuses use the contract's vocabulary, that every profile key is read by a skill, that the delivery gate names the review verdicts, and that each snippet invokes an existing skill with modes from its `argument-hint`.

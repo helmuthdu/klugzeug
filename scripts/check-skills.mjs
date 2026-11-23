@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 // Validates every klugzeug skill and the shared files it depends on.
-//   - frontmatter: spec-valid name equal to the directory, a bounded description, known fields only
+//   - frontmatter: spec-valid name equal to the directory, a bounded description that says when to
+//     use the skill, known fields only
 //   - context budget: SKILL.md words, and SKILL.md plus the contract it always reads
 //   - references: every cited `references/...` or `../<skill>/...` path exists, and every file in
-//     references/ is cited by its SKILL.md (one level deep, no orphans)
+//     references/ is cited by its SKILL.md (one level deep, no orphans); each SKILL.md cites the contract
 //   - shared copies: regular files identical to shared/, present exactly where cited
 //   - vocabulary: bracket markers and plan statuses are the ones the contract defines
 //   - profile keys: every key row in the onboard template is read as **Key** outside onboard
@@ -114,6 +115,9 @@ function checkSkill(name) {
   if (!fields.description) fail(`${name}: frontmatter description is missing`);
   else if (fields.description.length > MAX_DESCRIPTION)
     fail(`${name}: description is ${fields.description.length} characters (max ${MAX_DESCRIPTION})`);
+  if (fields.description && !fields.description.includes('Use when'))
+    fail(`${name}: description must state when to use the skill ("Use when ...")`);
+  if (!fields['argument-hint']) fail(`${name}: frontmatter argument-hint is missing; snippets validate against it`);
   for (const key of Object.keys(fields)) if (!FRONTMATTER_FIELDS.has(key)) fail(`${name}: unknown frontmatter field "${key}"`);
 
   const skillWords = words(body);
@@ -123,6 +127,9 @@ function checkSkill(name) {
     if (activation > MAX_ACTIVATION_WORDS)
       fail(`${name}: SKILL.md plus contract is ${activation} words (max ${MAX_ACTIVATION_WORDS})`);
   }
+
+  if (!body.includes('`references/contract.md`'))
+    fail(`${name}: SKILL.md must tell the agent to read \`references/contract.md\``);
 
   const referenceFiles = markdownFiles(join(dir, 'references'));
   const sources = [text, ...referenceFiles.filter((path) => existsSync(path)).map(read)];
