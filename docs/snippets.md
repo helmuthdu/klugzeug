@@ -1,146 +1,540 @@
-# Prompt snippets
+# Prompt Snippets
 
-Short prompts for everyday work with the klugzeug skills. Each snippet starts with a `/kz-<skill> <mode>` line; the skill brings the procedure, evidence rules, validation, and report format, so the snippet only adds what the skill cannot know: scope, intent, and preferences that differ from its defaults.
+Short, reusable prompts for everyday software engineering with [Klugzeug](https://github.com/helmuthdu/klugzeug) and specialized agent skills.
 
-- Fill the `[slots]` and delete optional lines you do not need.
-- Commands, stack, test runner, and docs tooling come from the project profile (`/kz-onboard`), so the snippets have no slots for them.
-- Snippets chain through the plan file or the conversation: review or plan first, then implement with `/kz-build`, then ship with `/kz-deliver`.
+Each snippet defines **what to accomplish**, while the corresponding skill handles **how to accomplish it**: investigation, execution, validation, evidence, and reporting.
 
-| Snippet | Skill | Replaces |
-| ------- | ----- | -------- |
-| [Review a change](#review-a-change) | `kz-review pr` | Code review, Independent code review, Changes review |
-| [Architecture review](#architecture-review) | `kz-review greenfield` | Architecture review, Design from scratch review, simple Code review |
-| [Challenge a proposal](#challenge-a-proposal) | `kz-review greenfield` | Challenge code review |
-| [Framework-agnostic API review](#framework-agnostic-api-review) | `kz-review greenfield` | Framework-agnostic API design |
-| [Security review](#security-review) | `kz-review security` | Security review |
-| [UI and UX review](#ui-and-ux-review) | `kz-review ux ui a11y` | UI/UX review, simple UX/UI review |
-| [Consolidation plan](#consolidation-plan) | `kz-plan improve` | Monorepo consolidation analysis |
-| [New package](#new-package) | `kz-pipeline new-module` | Create a new package |
-| [Full pass](#full-pass) | `kz-pipeline improve` | All at once |
-| [Implement](#implement) | `kz-build` | Start implementing, Start implement |
-| [Fix failing checks](#fix-failing-checks) | `kz-build` | Fix build, Fix test failures |
-| [Restructure tests](#restructure-tests) | `kz-test` | Test restructuring |
-| [Update docs](#update-docs) | `kz-docs` | Docs update, Docs only update, simple Update docs |
+The goal is to minimize repeated instructions while maintaining excellent developer experience, code quality, and agent autonomy.
 
-Reviews never edit. To review and fix in one go, keep the optional "Then fix" line: the review hands the findings you approved there to `kz-build`, which fixes and validates them.
+## Conventions
 
-## Review a change
+- **Scope:** Replace `[placeholders]` with the relevant context. Omit optional details when the repository already provides them.
+- **Ground truth:** Inspect the actual source, configuration, and consumers. Project profiles provide context but should be verified when relevant.
+- **Reviews:** Analyze and recommend without modifying files.
+- **Implementation:** Apply changes directly, update affected consumers, and validate the result.
+- **Breaking changes:** Acceptable when justified by meaningful improvements, never mandatory.
+- **Design philosophy:** Favor correctness, simplicity, clear boundaries, maintainability, and excellent DX. Challenge unnecessary abstractions and complexity.
+- **Autonomy:** Make reasonable decisions independently. Ask only when essential information is missing or an action requires authorization.
+- **Validation:** Run relevant checks and report actual results. Never claim validation that was not performed.
+- **Repository safety:** Preserve unrelated changes. Do not commit, push, publish, or create pull requests unless explicitly requested.
+- **Reporting:** Be concise, evidence-based, and actionable. Avoid repetitive checklists, generic advice, and unnecessary ceremony.
 
-```text
-/kz-review pr [uncommitted changes, branch, diff, or paths; default: current branch against its base]
-Intent: [PR description, change files, or "infer from the commits"]
-Run the focused tests and any build configured for the touched packages; if no build is configured, say so instead of guessing.
-Second pass (optional): try to disprove the change, and say whether it is better than what it replaced.
-End with: intent met, tests adequate, docs and types accurate, dead or transitional code left, and the verdict.
-[Then fix the Critical, High, and Medium findings with kz-build and validate.]
-```
+## 1. Explore & Plan
 
-## Architecture review
+### Architecture Review
+
+**Skill:** `kz-review greenfield`
+
+Review architecture, API design, and developer experience from a greenfield perspective.
 
 ```text
 /kz-review greenfield [path]
-Constraints: [for example no new dependencies, or none]
-Judge it as if designing it from scratch, in this order: developer experience, simplicity, boundaries, maintainability. Breaking changes are acceptable; recommend deleting any layer that does not pay for itself.
-Keep to the [5–8] highest value-to-effort recommendations, and list larger long-term changes under Future.
-[Then implement the top recommendations with kz-build; breaking changes are approved.]
+
+Focus: architecture, API design, and developer experience.
+
+Evaluate the code as if designing it today. Prioritize DX, simplicity, clear boundaries, and maintainability.
+
+Challenge existing decisions and abstractions. Recommend removing anything that adds more complexity than value, considering actual consumers and migration impact.
+
+Return the [5–8] highest-value improvements, ranked by impact and effort. Separate actionable recommendations from longer-term opportunities.
 ```
 
-For an implementable worklist instead of a report, use `/kz-plan [path] improve` with the same lines; `/kz-build` can then work through `.plan.md`.
+### Challenge Proposal
 
-## Challenge a proposal
+**Skill:** `kz-review greenfield`
+
+Independently challenge an existing plan or proposed architecture before implementation.
 
 ```text
-/kz-review greenfield [.plan.md, or "the proposal above"]
-Challenge the proposal before it is implemented: does it clearly improve correctness, simplicity, architecture, maintainability, and developer experience over the current code? Do not accept it because it works or was already proposed.
-For each item, say keep, simplify, or reject; for a rejection, give the simpler alternative. End with a verdict on the whole proposal.
+/kz-review greenfield [.plan.md or proposal]
+
+Independently challenge the proposal against its original goal and the current implementation.
+
+For each significant recommendation, decide: Keep, Simplify, Replace, or Reject.
+
+Identify unnecessary abstractions, overlooked alternatives, hidden complexity, regression risks, and changes that provide insufficient value.
+
+Prefer the simplest design that fully solves the problem.
+
+End with a clear verdict and the minimum changes needed before implementation.
 ```
 
-## Framework-agnostic API review
+### Consolidation Plan
 
-```text
-/kz-review greenfield [path]
-Focus: the core's public API as used directly from React 19, Vue 3, and Svelte 5.
-Hard constraint: the core stays free of any UI framework, DOM, or scheduler assumption, and there are no adapter packages, now or later.
-Find what makes direct use awkward: singletons, hidden globals, lifecycle or event-loop assumptions, and missing subscribe/getSnapshot-style primitives. Keep to the 4–6 highest-impact API changes, each with a before and after signature.
-Then show the final API used directly, with no adapter: a React hook on useSyncExternalStore, a Vue composable with ref, computed, and cleanup, and Svelte 5 runes. Name the hooks after the library.
-```
+**Skill:** `kz-plan improve`
 
-## Security review
-
-```text
-/kz-review security [path]
-Trust boundary: [which input is attacker-controlled, for example "all rendered content comes from users"]
-End with a sign-off: clean, or blocked until the listed fixes land.
-```
-
-## UI and UX review
-
-```text
-/kz-review ux ui a11y [route, component, or URL]
-Surface: [marketing page | product UI]; priority devices: [for example mobile-first]
-Check it in a browser at the priority widths. Also call out popovers clipped by overflow containers, ad hoc z-index values, labels that overflow at narrow widths, and a generic, templated look.
-List what works well and should be kept.
-[Then fix the Critical and High findings with kz-build and verify them in the browser.]
-```
-
-## Consolidation plan
+Analyze overlapping responsibilities and duplicated functionality across monorepo packages.
 
 ```text
 /kz-plan [packages directory] improve
-Focus: duplication and overlap between packages. Catalogue: [path, or "scan the packages"]
-Read each package's stated purpose and public exports first. Classify each overlap as exact duplicate, functional overlap, misplaced utility, spread concern, or dependency inversion.
-Write plan items only for High and Medium findings, each with the target package, the call sites affected, and the migration; put Low findings in one table. Include the proposed package map and the look-alike utilities that should stay separate. Breaking changes are fine when the benefit is clear.
+
+Focus: package responsibilities, overlapping functionality, duplication, and dependency boundaries.
+
+Catalogue: [path or "discover packages"]
+
+Inspect actual public exports, implementations, consumers, and package purposes.
+
+Identify meaningful consolidation opportunities, misplaced utilities, unnecessary package boundaries, and dependency inversions.
+
+Preserve intentional differences and avoid consolidation that introduces awkward coupling.
+
+Produce a prioritized implementation plan with target packages, affected consumers, and migration steps.
+
+Breaking changes are acceptable when the resulting architecture is meaningfully simpler.
 ```
 
-## New package
+### Framework-Free API
+
+**Skill:** `kz-review greenfield`
+
+Review framework-agnostic libraries for direct integration with modern UI frameworks.
 
 ```text
-/kz-pipeline packages/[name] new-module [name]
-Package: [@scope/name]. Purpose: [one sentence]
-Before planning, confirm no existing package already owns this responsibility; stop if one does. Mirror the closest existing package's layout, build config, package.json shape, and test location.
-Depend on workspace packages through the workspace protocol and check the graph for cycles. Keep the public API minimal and documented. Wire the package into the workspace config. [Then open a pull request.]
+/kz-review greenfield [path]
+
+Focus: framework-agnostic API design and direct integration with React, Vue, Solid, and Svelte.
+
+Hard constraint: the core must not depend on UI frameworks, DOM APIs, or framework-specific lifecycle and scheduling behavior. No dedicated adapter packages.
+
+Evaluate API ergonomics, state ownership, subscriptions, lifecycle management, type safety, and portability.
+
+Identify actual integration friction before proposing new primitives. Prefer the smallest API that works naturally across the target frameworks.
+
+Recommend [4–6] meaningful improvements with before/after signatures and migration impact.
+
+Demonstrate the proposed API with concise, realistic examples for each target framework.
 ```
 
-## Full pass
+### Triage Bug
+
+**Skill:** `kz-plan bug`
+
+Investigate a bug and establish a grounded plan before implementation.
 
 ```text
-/kz-pipeline [path] improve
-Proceed without stopping. Breaking changes are approved: update every dependent and leave no shims or transitional code.
-Plan as if designing from scratch, in this order: developer experience, simplicity, boundaries, maintainability. Delete layers that do not pay for themselves.
-[Then commit the result.]
+/kz-plan [path] bug [issue ID or symptom]
+
+Expected: [expected behavior]
+Actual: [observed behavior]
+Reproduction: [steps, failing test, or unknown]
+
+Investigate the underlying cause, affected behavior, and regression risk.
+
+Prefer the smallest correct fix. Avoid speculative changes or unnecessary refactoring.
+
+Produce an actionable plan with appropriate regression coverage.
 ```
 
-The pipeline challenges its own plan before building, reviews the resulting diff independently, fixes Critical and High findings, updates the docs, and runs the aggregate gates once. Drop "Proceed without stopping" to approve the plan yourself.
+## 2. Implement & Fix
 
-## Implement
+### Implement
+
+**Skill:** `kz-build`
+
+Implement an approved plan, review findings, or requested improvements.
 
 ```text
-/kz-build [path] [plan item IDs, "all of .plan.md including Future", or "the findings above"]
-Breaking changes are approved: replace old APIs entirely, update every dependent in the repository, and leave no shims, deprecated exports, or TODOs for later.
-When conflicting suggestions exist, pick the simplest one and say why. If a published package's API breaks, note the version bump in the report.
+/kz-build [path] [approved plan items or findings]
+
+Implement the requested changes cohesively.
+
+Challenge recommendations that conflict with the actual code or introduce unnecessary complexity. Prefer the simplest complete solution with excellent DX.
+
+Breaking changes are acceptable when they meaningfully improve the design. Update affected consumers, types, tests, and documentation.
+
+Remove obsolete code rather than maintaining unnecessary compatibility layers.
+
+Follow repository conventions, validate affected packages, and report unresolved issues.
 ```
 
-## Fix failing checks
+### Fix Red Checks
+
+**Skill:** `kz-build`
+
+Diagnose and resolve failing builds, tests, linting, or type checks.
 
 ```text
 /kz-build [path]
-Fix the failing [build | typecheck | tests].
-Command: [command, or "use the profile"]. Last known-good: [commit or branch, or "unknown"]
-[Paste the output, or leave this out and let the agent run the command.]
+
+Fix the failing [build | typecheck | tests | lint].
+
+Command: [command or "discover from repository"]
+Last known-good: [commit, branch, or unknown]
+Failure output: [paste output or let the agent reproduce]
+
+Reproduce the failure, identify its root cause, and apply the simplest correct fix.
+
+Preserve type safety and test integrity. Do not suppress errors, weaken assertions, or skip tests merely to make checks pass.
+
+Rerun affected checks and report the verified outcome.
 ```
 
-## Restructure tests
+### New Package
+
+**Skill:** `kz-pipeline new-module`
+
+Create and integrate a new monorepo package.
+
+```text
+/kz-pipeline packages/[name] new-module [name]
+
+Package: [@scope/name]
+Purpose: [one-sentence responsibility]
+
+Confirm no existing package already owns this responsibility. If meaningful overlap exists, explain it before creating a duplicate.
+
+Follow the closest existing package's conventions for structure, tooling, exports, tests, and documentation.
+
+Keep the public API minimal, ergonomic, and type-safe. Avoid unnecessary dependencies and abstractions.
+
+Integrate the package into the workspace, update affected configuration, and verify the dependency graph contains no new cycles.
+
+Validate the package and its integration with the monorepo.
+```
+
+### Update Dependencies
+
+**Skill:** `kz-build`
+
+Upgrade dependencies while preserving expected behavior.
+
+```text
+/kz-build [path]
+
+Upgrade: [package, dependency group, or all outdated dependencies]
+Target: [version, latest compatible, or latest]
+Constraints: [optional]
+
+Inspect release notes and relevant breaking changes before upgrading.
+
+Prefer supported, compatible versions. Update configuration, APIs, and affected consumers when required.
+
+Avoid unrelated refactoring and unnecessary dependency additions.
+
+Run relevant build, type-check, lint, and test commands. Report unresolved compatibility issues.
+```
+
+## 3. Review & Audit
+
+### Review Diff
+
+**Skill:** `kz-review pr`
+
+Perform an independent code review of recent changes.
+
+```text
+/kz-review pr [uncommitted changes, branch, diff, or paths]
+
+Intent: [description or "infer from changes"]
+
+Read the diff, affected files, and relevant consumers.
+
+Evaluate correctness, regressions, architecture, API/DX, tests, performance, and unnecessary complexity.
+
+Challenge whether the changes actually improve the code relative to their intended goal.
+
+Prioritize actionable findings by severity, with concrete fixes and file references. Avoid speculative issues and style-only feedback.
+
+Run relevant validation where available.
+
+Conclude whether the changes should be accepted, revised, or rejected, and why.
+```
+
+### Security Review
+
+**Skill:** `kz-review security`
+
+Identify real, reachable security vulnerabilities.
+
+```text
+/kz-review security [path]
+
+Trust boundary: [attacker-controlled inputs and relevant entry points]
+
+Trace untrusted data through actual execution paths before assigning severity.
+
+Focus on exploitable vulnerabilities, insecure defaults, authorization boundaries, sensitive data exposure, and dependency risks.
+
+Distinguish verified vulnerabilities from hypothetical hardening opportunities.
+
+Prioritize actionable fixes based on exploitability and impact.
+
+Never reproduce discovered secrets in the report.
+
+End with a clear security assessment and any blocking findings.
+```
+
+### Reliability Review
+
+**Skill:** `kz-review reliability`
+
+Evaluate failure handling, consistency, and resilience.
+
+```text
+/kz-review reliability [path]
+
+Concern: [failure scenario or "general reliability"]
+
+Evaluate realistic failure modes, data integrity, recovery behavior, concurrency, and error handling.
+
+Trace actual execution paths and distinguish demonstrated risks from hypothetical scenarios.
+
+Prefer straightforward safeguards over unnecessary resilience infrastructure.
+
+Prioritize findings by likelihood, impact, and implementation effort.
+```
+
+### UI/UX Review
+
+**Skill:** `kz-review ux ui a11y`
+
+Evaluate usability, visual design, interactions, and accessibility.
+
+```text
+/kz-review ux ui a11y [route, component, or URL]
+
+Surface: [marketing page | product UI]
+Priority devices: [mobile, desktop, or both]
+
+Evaluate usability, visual hierarchy, consistency, interaction feedback, accessibility, and responsive behavior.
+
+Inspect rendered behavior in a browser when available. Distinguish verified observations from assumptions based on code.
+
+Pay attention to overflow clipping, stacking contexts, keyboard navigation, focus management, narrow layouts, empty/error states, and generic visual patterns.
+
+Prioritize meaningful improvements over cosmetic changes.
+
+Identify successful patterns worth preserving and recommend the three highest-impact improvements.
+```
+
+### Motion Design
+
+**Skill:** `motion-design`
+
+Improve motion and interaction quality across a component library or application.
+
+```text
+Use the motion-design skill to review and improve motion across [path].
+
+Evaluate consistency, interaction feedback, entrance/exit transitions, interruption handling, performance, and reduced-motion accessibility.
+
+Establish a small, cohesive motion vocabulary using existing design tokens and primitives.
+
+Apply meaningful improvements directly. Prefer purposeful, subtle motion over decorative effects.
+
+Avoid unnecessary dependencies, excessive configuration, and generalized animation abstractions.
+
+Validate rendered behavior, rapid interactions, accessibility, and relevant tests.
+
+Remove animations that introduce friction, visual noise, or unnecessary delays.
+```
+
+## 4. Quality & Maintenance
+
+### Restructure Tests
+
+**Skill:** `kz-test`
+
+Improve the organization, clarity, and value of an existing test suite.
 
 ```text
 /kz-test [path]
-Restructure the tests: group them by behaviour, remove obsolete, duplicated, or brittle tests, and fill gaps on the main flows and failure paths. Report coverage before and after.
+
+Restructure the tests around meaningful behaviors and responsibilities.
+
+Inspect the implementation, test conventions, and existing results before changing anything.
+
+Remove obsolete, duplicated, brittle, or implementation-coupled tests when justified.
+
+Prioritize deterministic tests, clear assertions, minimal mocking, and straightforward setup.
+
+Fill meaningful coverage gaps in critical flows, edge cases, and failure scenarios.
+
+Preserve intended behavior rather than blindly updating expectations to match potentially incorrect code.
+
+Run the relevant suite and compare coverage where available.
 ```
 
-## Update docs
+### Test Gaps
+
+**Skill:** `kz-test audit-only`
+
+Identify missing or low-value test coverage without modifying files.
+
+```text
+/kz-test [path] audit-only
+
+Focus: [module, behavior, or "general coverage"]
+
+Evaluate test quality and coverage against the actual implementation.
+
+Identify missing critical scenarios, regression risks, redundant tests, brittle assertions, and excessive mocking.
+
+Prioritize findings by risk and practical value rather than coverage percentage alone.
+
+Recommend concrete tests to add, improve, or remove.
+
+Do not modify files.
+```
+
+### Update Docs
+
+**Skill:** `kz-docs`
+
+Bring documentation into alignment with the current implementation.
 
 ```text
 /kz-docs [path]
-Bring the docs [and the README] in line with the current implementation: [what changed, or "audit everything"].
-[Interactive examples live in <path>; run them.]
-End with the removed pages and a 5–10 bullet summary of the changes.
+
+Bring the documentation and README into alignment with the current implementation.
+
+Scope: [what changed or "audit all documentation"]
+
+Verify public APIs, types, defaults, behavior, and examples against actual source code.
+
+Follow existing documentation conventions and apply Diátaxis where useful without forcing unnecessary pages.
+
+Update navigation, cross-references, and interactive examples where relevant.
+
+Remove outdated, duplicated, or misleading content.
+
+Keep documentation concise, accurate, and practical. Run available documentation checks.
 ```
+
+### JSDoc Pass
+
+**Skill:** `kz-docs jsdoc`
+
+Improve source-level API documentation.
+
+```text
+/kz-docs [path] jsdoc
+
+Audit public API documentation against the actual implementation.
+
+Correct inaccurate or outdated descriptions, types, parameters, return values, defaults, and examples.
+
+Add missing documentation where it improves API discoverability and developer experience.
+
+Follow the repository's documentation conventions.
+
+Avoid redundant comments that merely restate obvious code.
+
+Do not document obsolete or internal APIs unnecessarily.
+```
+
+### Refresh Profile
+
+**Skill:** `kz-onboard`
+
+Audit and maintain project instructions and agent context.
+
+```text
+/kz-onboard [repo path]
+
+Audit and improve the repository's AGENTS.md files and project profile.
+
+Verify instructions against current source, tooling, architecture, and documentation.
+
+Preserve intentional project-specific constraints. Correct outdated information, remove redundancy, and resolve conflicting instructions.
+
+Keep root instructions concise and move specialized guidance to scoped files where justified.
+
+Complement the kz-* skills without duplicating their workflows.
+
+Do not modify application code.
+```
+
+## 5. End-to-End Workflows
+
+### Full Pass
+
+**Skill:** `kz-pipeline improve`
+
+Perform a comprehensive improvement cycle.
+
+```text
+/kz-pipeline [path] improve
+
+Perform a complete improvement pass: analyze, plan, implement, independently review, and validate.
+
+Prioritize correctness, DX, simplicity, clear boundaries, and maintainability.
+
+Breaking changes are permitted when justified, but avoid unnecessary redesign.
+
+Remove obsolete code and update affected consumers without leaving unnecessary compatibility layers.
+
+Challenge the plan before implementation and the resulting diff afterward.
+
+Fix substantive findings and run relevant validation.
+
+Do not commit, push, or publish.
+```
+
+### Ship
+
+**Skill:** `kz-deliver commit`
+
+Finalize and deliver completed work.
+
+```text
+/kz-deliver commit [and open a pull request]
+
+Branch: [optional branch name]
+Base: [optional base branch]
+Issue: [optional issue ID]
+
+Verify the final changes and summarize their intent.
+
+Follow repository conventions for commit messages, changelogs, and pull requests.
+
+Commit only the intended changes. Do not include unrelated modifications.
+
+Push or create a pull request only when explicitly requested.
+```
+
+## Choosing a Workflow
+
+| Goal                              | Recommended snippet |
+| --------------------------------- | ------------------- |
+| Improve existing architecture     | Architecture Review |
+| Challenge an AI-generated plan    | Challenge Proposal  |
+| Reduce package duplication        | Consolidation Plan  |
+| Redesign a framework-free library | Framework-Free API  |
+| Investigate a bug                 | Triage Bug          |
+| Implement approved changes        | Implement           |
+| Fix failing checks                | Fix Red Checks      |
+| Create a package                  | New Package         |
+| Upgrade dependencies              | Update Dependencies |
+| Review uncommitted changes        | Review Diff         |
+| Audit security                    | Security Review     |
+| Investigate failure scenarios     | Reliability Review  |
+| Improve interface quality         | UI/UX Review        |
+| Improve animations                | Motion Design       |
+| Clean up a test suite             | Restructure Tests   |
+| Find missing tests                | Test Gaps           |
+| Refresh documentation             | Update Docs         |
+| Improve API comments              | JSDoc Pass          |
+| Maintain AGENTS.md                | Refresh Profile     |
+| Execute an improvement cycle      | Full Pass           |
+| Commit or open a PR               | Ship                |
+
+## Design Principles
+
+These principles should primarily live in Klugzeug's shared contracts rather than being repeated in every snippet.
+
+**Correctness first.** Understand actual behavior and constraints before making changes.
+
+**Developer experience matters.** Prefer intuitive APIs, discoverable behavior, clear errors, and straightforward maintenance.
+
+**Simplicity over abstraction.** Remove unnecessary layers, configuration, duplication, and indirection.
+
+**Challenge assumptions.** Existing implementations and AI-generated recommendations are both subject to critical review.
+
+**Greenfield-friendly, not rewrite-driven.** Breaking changes are acceptable when justified, but preserving a good design is equally valid.
+
+**Evidence over confidence.** Ground findings in code, actual consumers, execution results, and verified behavior.
+
+**Proportional effort.** Invest in changes that meaningfully improve the outcome. Avoid unnecessary process and exhaustive low-value work.
+
+**Skills own workflows. Snippets own intent.** Keep prompts focused on what makes the current task different.
