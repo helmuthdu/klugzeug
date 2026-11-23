@@ -68,6 +68,7 @@ This template is the canonical list of profile keys. Copy its structure into `AG
 | --- | ----- |
 | Runtime and package manager | <runtime version, package manager, workspace layout> |
 | Plan file | `<path>/.plan.md`; gitignored: yes or no; committed: yes or no |
+| Issue tracker | <provider (jira, github, gitlab, linear) and project/team key or owner/repo> or none |
 | Protected branches | <branches no skill may commit to>; default main, master |
 | Protected paths | `<path>`: <why, and what approval it needs>, or none |
 | Public API entry points | `<files that define public exports>` or none |
