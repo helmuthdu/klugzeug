@@ -6,7 +6,6 @@ This template is the canonical list of profile keys. Copy its structure into `AG
 ## Project profile
 
 - **Stack**: <language, frontend framework and UI library or none, state/data library, backend framework or none, database and migration tooling or none, test runners, bundler>
-- **Workflow skills**: kz-plan, kz-build, kz-test, kz-review, kz-docs, kz-deliver, kz-pipeline, kz-onboard (klugzeug)
 
 ### Commands
 
