@@ -92,7 +92,7 @@ One line per finding:
 
 ## Plan file
 
-`<scope>/.plan.md`, or the location **Plan file** names, is the worklist shared by `kz-plan`, `kz-build`, `kz-review`, and `kz-pipeline`. It is never committed unless **Plan file** says so. One active plan per scope; replace it only with the user's direction.
+`<scope>/.plan.md`, or the location **Plan file** names, is the worklist shared by `kz-plan`, `kz-build`, `kz-review`, `kz-pipeline`, and `kz-issue`. It is never committed unless **Plan file** says so. One active plan per scope; replace it only with the user's direction.
 
 - Item IDs: `B` bug, `R` reliability, `S` security, `F` feature, `D` design (including UX and UI), `P` performance, `A` accessibility, `T` tests, `X` docs.
 - Item status goes on its heading: `— DONE`, `— FIXED`, `— OBSOLETE`, `— NO CHANGE NEEDED`, `— BLOCKED`.

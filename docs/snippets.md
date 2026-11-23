@@ -125,6 +125,27 @@ Prefer the smallest correct fix. Avoid speculative changes or unnecessary refact
 Produce an actionable plan with appropriate regression coverage.
 ```
 
+### Plan from Issue
+
+**Skill:** `kz-issue plan`
+
+Retrieve an external issue and produce a source-verified implementation plan without editing code.
+
+```text
+/kz-issue [issue URL or ID] plan
+
+Provider: [optional: jira | github | gitlab | linear]
+Scope: [optional target path]
+
+Retrieve and normalize the issue context, comments, acceptance criteria, and blockers.
+
+Inspect the controlling source, consumers, and tests before proposing changes.
+
+Map each plan item's Done when to explicit acceptance criteria when present; otherwise ground it in the verified objective and mark remaining uncertainty [VERIFY], without inventing requirements.
+
+Do not modify application code or update the issue tracker.
+```
+
 ## 2. Implement & Fix
 
 ### Implement
@@ -447,6 +468,43 @@ Do not modify application code.
 
 ## 5. End-to-End Workflows
 
+### Work an Issue
+
+**Skill:** `kz-issue`
+
+Take an issue from Jira, GitHub, GitLab, Linear, or inline text through implementation, validation, and independent review.
+
+```text
+/kz-issue [issue URL, ID, or description]
+
+Sync: [off | confirm | auto]
+Provider: [optional: jira | github | gitlab | linear]
+
+Retrieve the issue context and verify requirements against the actual codebase.
+
+Plan when warranted, implement cohesively, validate affected surfaces, and independently review the diff.
+
+In full mode, proceed through planning without a separate approval pause and fix Critical/High review findings; honor all other contract and pipeline approval gates.
+
+Synchronize milestones only according to the requested sync policy, and never close the issue automatically.
+
+Do not commit, push, or open a pull request unless explicitly requested.
+```
+
+### Resume Issue
+
+**Skill:** `kz-issue resume`
+
+Continue interrupted or multi-session issue work without repeating completed phases or updates.
+
+```text
+/kz-issue [issue URL or ID] resume
+
+Reconcile the saved .plan.md state with current local changes and the latest issue updates.
+
+Preserve uncommitted edits, skip completed work and synced milestones, and continue from the next incomplete phase.
+```
+
 ### Full Pass
 
 **Skill:** `kz-pipeline improve`
@@ -502,6 +560,7 @@ Push or create a pull request only when explicitly requested.
 | Reduce package duplication        | Consolidation Plan  |
 | Redesign a framework-free library | Framework-Free API  |
 | Investigate a bug                 | Triage Bug          |
+| Scope and plan from an issue      | Plan from Issue     |
 | Implement approved changes        | Implement           |
 | Fix failing checks                | Fix Red Checks      |
 | Create a package                  | New Package         |
@@ -517,6 +576,8 @@ Push or create a pull request only when explicitly requested.
 | Improve API comments              | JSDoc Pass          |
 | Maintain AGENTS.md                | Refresh Profile     |
 | Execute an improvement cycle      | Full Pass           |
+| Take an issue end to end          | Work an Issue       |
+| Continue interrupted issue work   | Resume Issue        |
 | Commit or open a PR               | Ship                |
 
 ## Design Principles

@@ -1,6 +1,6 @@
 # klugzeug
 
-A stack-agnostic set of eight agent skills for frontend and backend engineering: `kz-plan`, `kz-build`, `kz-test`, `kz-review`, `kz-docs`, `kz-deliver`, `kz-pipeline`, and `kz-onboard`. The `kz-` prefix keeps them from colliding with built-in client skills such as Cursor's `/review` and `/onboard`. Project specifics live in each repository's `AGENTS.md`, in a `## Project profile` section, not in the skills.
+A stack-agnostic set of nine agent skills for frontend and backend engineering: `kz-plan`, `kz-build`, `kz-test`, `kz-review`, `kz-docs`, `kz-deliver`, `kz-pipeline`, `kz-issue`, and `kz-onboard`. The `kz-` prefix keeps them from colliding with built-in client skills such as Cursor's `/review` and `/onboard`. Project specifics live in each repository's `AGENTS.md`, in a `## Project profile` section, not in the skills.
 
 ## Skills
 
@@ -14,8 +14,9 @@ A stack-agnostic set of eight agent skills for frontend and backend engineering:
 | `kz-docs`     | Diátaxis guides, JSDoc, README, verified against source                                            |
 | `kz-deliver`  | Commits, branches, PR bodies, pull requests, change files; only the named action                   |
 | `kz-pipeline` | One run per independent task: ordered stages, plan approval, and one validation                    |
+| `kz-issue`    | End-to-end, planned, or resumed work from Jira, GitHub, GitLab, Linear, or manual issues           |
 
-Ownership: `kz-review` finds problems and never edits; `kz-build` edits; `kz-deliver` only ships. `kz-plan` writes only `.plan.md`; `kz-onboard` writes only the profile section.
+Ownership: `kz-review` finds problems and never edits; `kz-build` edits; `kz-deliver` only ships. `kz-plan` writes only `.plan.md`; `kz-onboard` writes only the profile section; `kz-issue` normalizes tracker context, routes through the other skills, and writes to the tracker only when sync is enabled.
 
 [`docs/snippets.md`](docs/snippets.md) has short prompts for everyday work (reviews, fixes, new packages, docs) that invoke these skills.
 
@@ -26,7 +27,7 @@ Ownership: `kz-review` finds problems and never edits; `kz-build` edits; `kz-del
 
 Each skill carries the shared files it cites as regular copies under `references/`, because installers copy skill folders one by one. Edit `shared/`, then run `node scripts/check-skills.mjs --fix` to regenerate the copies.
 
-Skills that use another skill (`kz-pipeline` runs every stage; `kz-plan` reads `kz-review`'s checklist and lenses) find it as a sibling directory, so install all eight into the same folder.
+Skills that use another skill (`kz-pipeline` runs every stage; `kz-issue` routes issue work through `kz-pipeline`, `kz-plan`, `kz-build`, `kz-test`, `kz-review`, `kz-docs`, and `kz-deliver`; `kz-plan` reads `kz-review`'s checklist and lenses) find it as a sibling directory, so install all nine into the same folder.
 
 ## Install
 
@@ -41,11 +42,11 @@ From a clone, link the skills into your agent folders. This is the install to ke
 
 The installer first runs `scripts/check-skills.mjs` and refuses to link a broken set. It never overwrites a path that is not a link into this repository; it reports the collision.
 
-On a machine that does not have the clone, install the published branch. Select all eight skills and the agents you use. Before installing, check for existing skills with the same names in those agents and back up or resolve any collisions: the CLI can overwrite them without asking.
+On a machine that does not have the clone, install the published branch. Select all nine skills and the agents you use. Before installing, check for existing skills with the same names in those agents and back up or resolve any collisions: the CLI can overwrite them without asking.
 
 ```sh
 npx skills add helmuthdu/klugzeug -g
-npx skills update -g kz-plan kz-build kz-test kz-review kz-docs kz-deliver kz-pipeline kz-onboard
+npx skills update -g kz-plan kz-build kz-test kz-review kz-docs kz-deliver kz-pipeline kz-issue kz-onboard
 npx skills remove helmuthdu/klugzeug -g
 ```
 
@@ -72,7 +73,7 @@ Resolution order: the user's request, then the profile (walk up until an `AGENTS
 ```sh
 node scripts/check-skills.mjs          # validate
 node scripts/check-skills.mjs --fix    # regenerate shared copies, then validate
-node --test scripts/check-skills.test.mjs
+node --test scripts/*.test.mjs
 ```
 
 The checker validates spec frontmatter (name, description with a "Use when" clause, argument-hint, known fields), word budgets for each `SKILL.md` and for `SKILL.md` plus the contract, that every skill tells the agent to read `references/contract.md`, that every cited file and sibling skill exists, that no reference file is orphaned, that shared copies match, that markers and plan statuses use the contract's vocabulary, that every profile key is read by a skill, that the delivery gate names the review verdicts, and that each snippet invokes an existing skill with modes from its `argument-hint`.

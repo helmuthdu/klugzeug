@@ -143,6 +143,24 @@ test('the delivery gate names the review verdicts', () => {
   }
 });
 
+test('kz-issue separates provider mechanics and sync state from workflow orchestration', () => {
+  const issueSkill = readFileSync(join(ROOT, 'skills', 'kz-issue', 'SKILL.md'), 'utf8');
+  const planSkill = readFileSync(join(ROOT, 'skills', 'kz-plan', 'SKILL.md'), 'utf8');
+  const syncRef = readFileSync(join(ROOT, 'skills', 'kz-issue', 'references', 'sync-and-state.md'), 'utf8');
+
+  assert.match(issueSkill, /`references\/providers\.md`/);
+  assert.match(issueSkill, /`references\/sync-and-state\.md`/);
+  for (const sibling of ['kz-plan', 'kz-build', 'kz-test', 'kz-review', 'kz-docs', 'kz-pipeline', 'kz-deliver']) {
+    assert.match(issueSkill, new RegExp(`\`\\.\\./${sibling}/SKILL\\.md\``), `kz-issue must delegate to ${sibling}`);
+  }
+  for (const providerLeak of ['cloudId', 'issuelinks', 'state_event', 'related_merge_requests', 'stateId']) {
+    assert.doesNotMatch(issueSkill, new RegExp(providerLeak), `SKILL.md leaked provider detail "${providerLeak}"`);
+  }
+  assert.match(issueSkill, /Never close, resolve, or transition an issue to a terminal state/);
+  assert.match(planSkill, /Issue \(preserve unchanged above Baseline when present\)/);
+  assert.match(syncRef, /^## Issue$/m);
+});
+
 test('enforces spec-valid frontmatter', () => {
   withFixture((root) => {
     edit(join(root, 'skills', 'kz-docs', 'SKILL.md'), (text) => text.replace('name: kz-docs', 'name: kz-docs\ntrigger: always'));
