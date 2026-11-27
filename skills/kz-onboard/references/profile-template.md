@@ -48,6 +48,7 @@ This template is the canonical list of profile keys. Copy its structure into `AG
 | Error types | `<error base class>` in `<path>` |
 | Return-shape convention | <values, nullable, or result objects> |
 | Query key convention | <how data-cache keys are built> or none |
+| Output language | `ste-reports` (standard; omit the key for the same) \| `ste-plan` \| `ste-artifacts` \| `ste-all` \| `verbose` |
 | Large-list approach | <virtualization or pagination, and the size where it starts> or none |
 | Commit convention | <format, with its source: documented policy, enforced hook, or inferred from history> |
 | PR template | `<path>` or none |

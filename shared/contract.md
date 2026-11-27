@@ -101,6 +101,8 @@ One line per finding:
 
 End every task with the following, unless the skill defines its own report. A skill's report still lists the validation run and the open markers.
 
+Read `references/ste-output.md` before chat or report prose unless **Output language** is `verbose`. A missing key uses `ste-reports`.
+
 - **Changed**: files, grouped by surface.
 - **Validation**: each command and its result; commands not run, with the reason.
 - **Open**: `[BLOCKED]`, `[VERIFY]`, and `[DEFERRED]` items.

@@ -20,7 +20,7 @@ const SKILLS = join(ROOT, 'skills');
 const SHARED = join(ROOT, 'shared');
 const CONTRACT = join(SHARED, 'contract.md');
 const PROFILE_TEMPLATE = join(SKILLS, 'kz-onboard', 'references', 'profile-template.md');
-const SHARED_FILES = ['contract.md', 'browser-verification.md'];
+const SHARED_FILES = ['contract.md', 'browser-verification.md', 'ste-output.md'];
 
 const MAX_DESCRIPTION = 400;
 const MAX_SKILL_WORDS = 800;
@@ -145,12 +145,16 @@ function checkSkill(name) {
 
   // A placeholder such as `references/<lens>.md` covers files whose bare name SKILL.md names in backticks or bold.
   const placeholder = /`references\/<[\w-]+>\.md`/.test(text);
+  const contractRef = join(dir, 'references', 'contract.md');
+  const contractText = existsSync(contractRef) ? read(contractRef) : '';
   for (const path of referenceFiles) {
     const entry = path.slice(path.lastIndexOf('/') + 1);
     const base = entry.replace(/\.md$/, '');
     const named = text.includes(`\`references/${entry}\``);
     const covered = placeholder && (text.includes(`\`${base}\``) || text.includes(`**${base}**`));
-    if (!named && !covered) fail(`${name}: references/${entry} is not cited by SKILL.md`);
+    const citedInContract =
+      SHARED_FILES.includes(entry) && entry !== 'contract.md' && contractText.includes(`\`references/${entry}\``);
+    if (!named && !covered && !citedInContract) fail(`${name}: references/${entry} is not cited by SKILL.md`);
   }
 
   for (const shared of SHARED_FILES) {
