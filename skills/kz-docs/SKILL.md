@@ -43,7 +43,7 @@ A fact taken from a procedure belongs in reference. A reason belongs in explanat
 - Keep the README short: what it is, how to install it, a minimal usage example, and links to deeper docs.
 - Every breaking change gets migration notes, linked from the changelog or change entry as the profile requires.
 - Never hand-edit generated sections. Change their source and regenerate.
-- Apply `references/ste-output.md` to page body text only when **Output language** is `ste-all`.
+- Apply `references/output.md` to page body text only when **Output language** is `all`.
 
 ## Output
 

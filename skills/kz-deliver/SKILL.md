@@ -20,7 +20,7 @@ Read `references/contract.md` next to this SKILL.md and the profile. This skill 
 ## Commit
 
 1. Split the work by logical change: one commit per coherent change.
-2. Write the subject in the **Commit convention** format, matching the style of recent subjects. Add a body when it helps: why, not what, plus breaking changes and their migration. Use `references/ste-output.md` for commit and PR prose when **Output language** is `ste-artifacts` or `ste-all`.
+2. Write the subject in the **Commit convention** format, matching the style of recent subjects. Add a body when it helps: why, not what, plus breaking changes and their migration. Use `references/output.md` for commit and PR prose when **Output language** is `artifacts` or `all`.
 3. Use the branch the request names, otherwise the current branch. When the current branch is one **Protected branches** names (default `main` and `master`), create a new branch from it first; never commit to a protected branch.
 4. Never stage the **Plan file** unless that key says plans are committed.
 

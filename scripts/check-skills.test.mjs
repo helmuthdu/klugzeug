@@ -143,6 +143,18 @@ test('the delivery gate names the review verdicts', () => {
   }
 });
 
+test('existing output language values retain their tiers', () => {
+  const contract = readFileSync(join(ROOT, 'shared', 'contract.md'), 'utf8');
+  for (const [legacy, current] of [
+    ['ste-reports', 'reports'],
+    ['ste-plan', 'plan'],
+    ['ste-artifacts', 'artifacts'],
+    ['ste-all', 'all'],
+  ]) {
+    assert.ok(contract.includes(`\`${legacy}\` as \`${current}\``), `${legacy} must resolve to ${current}`);
+  }
+});
+
 test('kz-issue separates provider mechanics and sync state from workflow orchestration', () => {
   const issueSkill = readFileSync(join(ROOT, 'skills', 'kz-issue', 'SKILL.md'), 'utf8');
   const planSkill = readFileSync(join(ROOT, 'skills', 'kz-plan', 'SKILL.md'), 'utf8');

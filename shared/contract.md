@@ -14,6 +14,8 @@ Project facts come from the `## Project profile` section of an `AGENTS.md`. Re-r
 
 Rules are collected separately from the profile: every `AGENTS.md` from the target up to the repository root applies, a nearer file wins for its subtree, and a symlinked `AGENTS.md` counts at its own location. A rule that conflicts with the profile is `[BLOCKED]`.
 
+Resolve **Output language** aliases first: treat `ste-reports` as `reports`, `ste-plan` as `plan`, `ste-artifacts` as `artifacts`, and `ste-all` as `all`.
+
 Skills name profile keys in bold, for example **Test (all)**. A key set to `none` is skipped and listed in the report, never inferred. An absent key is `[VERIFY]`. A command found only by guessing is `[VERIFY]` and never reported as run. Without a profile, say so once and suggest `kz-onboard`.
 
 ## Write scope
@@ -101,7 +103,7 @@ One line per finding:
 
 End every task with the following, unless the skill defines its own report. A skill's report still lists the validation run and the open markers.
 
-Read `references/ste-output.md` before chat or report prose unless **Output language** is `verbose`. A missing key uses `ste-reports`.
+Read `references/output.md` before chat or report prose unless **Output language** is `verbose`. A missing key uses `reports`.
 
 - **Changed**: files, grouped by surface.
 - **Validation**: each command and its result; commands not run, with the reason.
