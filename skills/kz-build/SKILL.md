@@ -17,7 +17,7 @@ Read `references/contract.md` next to this SKILL.md and the project profile. The
 ## Flow
 
 1. **Read** the controlling source, its public surface, its tests, and its call sites. Reuse evidence already gathered in this task.
-2. **Change map** (non-trivial work): the contracts affected, implementation files, exports, tests, docs, dependents, and the validation to run.
+2. **Change map** (non-trivial work): the contracts affected, implementation files, exports, tests, docs, dependents, and the validation to run. Before adding an export, helper, wrapper, or a second way of doing something, run `references/reuse-check.md`.
 3. **Test first for bugs**: write a test that reproduces the reported behaviour and confirm it fails for the reported reason, then fix. A fix without a test that failed before and passes after is `[VERIFY]`.
 4. **Edit as one unit**: implementation, exports, types, tests, and the docs that describe the changed behaviour. Never leave a half-migrated surface. Work plan items in order, one at a time, with focused checks per item.
 5. **Propagate**: search sibling code for the same root cause (`rg`, with `--hidden` for renames). Fix equivalent occurrences only when they are in scope and verifiable; report the rest `[DEFERRED]`. Similar style alone is not the same root cause.
@@ -41,5 +41,6 @@ Read `references/contract.md` next to this SKILL.md and the project profile. The
 
 - **Changed**: files, grouped by surface.
 - **Impact**: public changes, dependents checked, and the propagation outcome.
+- **Reuse check**: per new helper or export, reused or new, and why.
 - **Validation**: commands and results; commands not run, with reasons.
 - **Open**: `[BLOCKED]`, `[VERIFY]`, and `[DEFERRED]` items.
