@@ -20,7 +20,7 @@ const SKILLS = join(ROOT, 'skills');
 const SHARED = join(ROOT, 'shared');
 const CONTRACT = join(SHARED, 'contract.md');
 const PROFILE_TEMPLATE = join(SKILLS, 'kz-onboard', 'references', 'profile-template.md');
-const SHARED_FILES = ['contract.md', 'browser-verification.md', 'ste-output.md'];
+const SHARED_FILES = ['contract.md', 'browser-verification.md', 'output.md'];
 
 const MAX_DESCRIPTION = 400;
 const MAX_SKILL_WORDS = 800;

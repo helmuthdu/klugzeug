@@ -24,7 +24,9 @@ Ownership: `kz-review` finds problems and never edits; `kz-build` edits; `kz-del
 
 - `shared/contract.md`: profile resolution, write scope, approval gates, markers, evidence, validation, findings, and the plan file. Every skill reads it on activation, so it stays short.
 - `shared/browser-verification.md`: the procedure for checking UI in a real browser. Used by `kz-build` and `kz-review`.
-- `shared/ste-output.md`: concise STE-inspired prose for chat and reports (`ste-reports`, standard). Optional tiers for plans, delivery, and docs; `verbose` opts out.
+- `shared/output.md`: concise STE-inspired prose for chat and reports (`reports`, standard). Optional tiers for plans, delivery, and docs; `verbose` opts out.
+
+Existing profiles may keep the legacy `ste-reports`, `ste-plan`, `ste-artifacts`, and `ste-all` values; each maps to the corresponding tier without the `ste-` prefix.
 
 Each skill carries the shared files it cites as regular copies under `references/`, because installers copy skill folders one by one. Edit `shared/`, then run `node scripts/check-skills.mjs --fix` to regenerate the copies.
 

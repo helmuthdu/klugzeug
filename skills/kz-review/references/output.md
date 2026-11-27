@@ -2,7 +2,7 @@
 
 Standard klugzeug prose for chat and skill reports. Structured formats in `references/contract.md` win. These rules govern free prose around them.
 
-Read **Output language** from the profile. A missing key means `ste-reports`. Use `verbose` to opt out.
+Read **Output language** from the profile. A missing key means `reports`. Use `verbose` to opt out.
 
 ## Rules
 
@@ -22,13 +22,13 @@ Do not rewrite: code fences, identifiers, paths, `file:line` citations, bracket 
 
 | **Output language** | Apply concise rules to |
 | --- | --- |
-| `ste-reports` (standard) | Chat and skill **Report** sections. Prose inside each finding line after severity and location. |
-| `ste-plan` | `ste-reports` plus **Assessment** and plan item **What** and **Why** in `.plan.md`. |
-| `ste-artifacts` | `ste-plan` plus commit messages and pull request bodies (`kz-deliver`). |
-| `ste-all` | `ste-artifacts` plus human-readable body text on pages (`kz-docs` only; not Diátaxis structure or reference tables). |
+| `reports` (standard) | Chat and skill **Report** sections. Prose inside each finding line after severity and location. |
+| `plan` | `reports` plus **Assessment** and plan item **What** and **Why** in `.plan.md`. |
+| `artifacts` | `plan` plus commit messages and pull request bodies (`kz-deliver`). |
+| `all` | `artifacts` plus human-readable body text on pages (`kz-docs` only; not Diátaxis structure or reference tables). |
 | `verbose` | No concise rules. |
 
-Higher tiers include everything above them. User-facing package README and tutorial pages stay in the project's normal voice unless **Output language** is `ste-all`.
+Higher tiers include everything above them. User-facing package README and tutorial pages stay in the project's normal voice unless **Output language** is `all`.
 
 ## Finding lines
 

@@ -305,6 +305,24 @@ Prefer straightforward safeguards over unnecessary resilience infrastructure.
 Prioritize findings by likelihood, impact, and implementation effort.
 ```
 
+### Consistency Review
+
+**Skill:** `kz-review consistency`
+
+Find more than one way of doing the same job.
+
+```text
+/kz-review consistency [path, or uncommitted changes]
+
+Concern: [the job to check, such as "map HTTP errors", or "any new helper"]
+
+Search for existing implementations of the same job and compare their behaviour.
+
+Flag a new helper, export, or pattern only when an equivalent one exists, citing both locations.
+
+If two patterns each have users and neither has twice the sibling usage, ask which one is canonical instead of choosing.
+```
+
 ### UI/UX Review
 
 **Skill:** `kz-review ux ui a11y`
