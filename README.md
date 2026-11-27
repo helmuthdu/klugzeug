@@ -24,6 +24,7 @@ Ownership: `kz-review` finds problems and never edits; `kz-build` edits; `kz-del
 
 - `shared/contract.md`: profile resolution, write scope, approval gates, markers, evidence, validation, findings, and the plan file. Every skill reads it on activation, so it stays short.
 - `shared/browser-verification.md`: the procedure for checking UI in a real browser. Used by `kz-build` and `kz-review`.
+- `shared/ste-output.md`: concise STE-inspired prose for chat and reports (`ste-reports`, standard). Optional tiers for plans, delivery, and docs; `verbose` opts out.
 
 Each skill carries the shared files it cites as regular copies under `references/`, because installers copy skill folders one by one. Edit `shared/`, then run `node scripts/check-skills.mjs --fix` to regenerate the copies.
 
@@ -76,4 +77,4 @@ node scripts/check-skills.mjs --fix    # regenerate shared copies, then validate
 node --test scripts/*.test.mjs
 ```
 
-The checker validates spec frontmatter (name, description with a "Use when" clause, argument-hint, known fields), word budgets for each `SKILL.md` and for `SKILL.md` plus the contract, that every skill tells the agent to read `references/contract.md`, that every cited file and sibling skill exists, that no reference file is orphaned, that shared copies match, that markers and plan statuses use the contract's vocabulary, that every profile key is read by a skill, that the delivery gate names the review verdicts, and that each snippet invokes an existing skill with modes from its `argument-hint`.
+The checker validates spec frontmatter (name, description with a "Use when" clause, argument-hint, known fields), word budgets for each `SKILL.md` and for `SKILL.md` plus the contract, that every skill tells the agent to read `references/contract.md`, that every cited file and sibling skill exists, that no reference file is orphaned (shared files cited from `references/contract.md` count), that shared copies match, that markers and plan statuses use the contract's vocabulary, that every profile key is read by a skill, that the delivery gate names the review verdicts, and that each snippet invokes an existing skill with modes from its `argument-hint`.

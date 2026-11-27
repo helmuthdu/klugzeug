@@ -6,7 +6,7 @@ argument-hint: '<scope path or diff> [code | pr | greenfield | reliability | sec
 
 # kz-review
 
-Read `references/contract.md` next to this SKILL.md and the profile. A review changes no code. If fixes are requested, hand the approved findings to `kz-build`. Start from the named file, diff, or behaviour. Read the controlling source and its tests before judging it, and expand to dependents only where they can affect a concrete finding.
+Read `references/contract.md` next to this SKILL.md and the profile. A review changes no code. If fixes are requested, hand the approved findings to `kz-build`. Start from the named file, diff, or behaviour. Read the controlling source and its tests first. Expand to dependents only when they affect a concrete finding.
 
 ## Lenses
 

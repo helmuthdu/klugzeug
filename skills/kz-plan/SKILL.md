@@ -29,6 +29,8 @@ When an item touches security, accessibility, performance, UX, UI, or reliabilit
 
 ## Output: `<scope>/.plan.md`
 
+Assessment, **What**, and **Why** follow `references/ste-output.md` when **Output language** is `ste-plan` or higher.
+
 Sections: Issue (preserve unchanged above Baseline when present), Baseline, Assessment, Proposed API (when relevant), Plan, Future, Risks. Baseline records the **Test (all)**, **Lint**, and **Typecheck** status if already known, otherwise `not run`. Order items bugs first, then by impact per effort:
 
 ```md
